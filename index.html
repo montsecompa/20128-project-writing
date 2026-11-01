@@ -1,0 +1,946 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script>window.__SEED={"names":"","group":"","cause":"","calsec":"","calnum":"","calarg":"","revealB":false,"revealK":false,"a":{"s":{},"n":{}},"b":{"s":{},"n":{}},"o":{"s":{},"n":{}}};</script><title>Evaluation Committee</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&amp;display=swap">
+<style>
+:root{
+  --bg:#f4f6fa; --surface:#ffffff; --surface2:#eef2f8; --tint:#f8fafd;
+  --ink:#1f2a3d; --muted:#5a6b85; --faint:#8695ac;
+  --line:#d7dfeb; --line2:#c2cee0;
+  --navy:#253760; --blue:#4173b0; --amber:#c87d12; --amber-bg:#fdf4e3;
+  --good:#1f7a52; --bad:#a53a2a;
+  --banner:#253760; --bannerfg:#ffffff; --bannerdim:#cfdcee; --bannerkick:#a8bcdb;
+  --thbg:#253760; --thfg:#ffffff; --btnfg:#ffffff;
+  --shadow:0 1px 2px rgba(31,42,61,.06), 0 8px 24px rgba(31,42,61,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161f; --surface:#1a212d; --surface2:#222b39; --tint:#1e2633;
+    --ink:#e7ecf4; --muted:#a3b0c4; --faint:#7d8a9e;
+    --line:#2f3a4c; --line2:#3d4a5e;
+    --navy:#8fb0dd; --blue:#7aa6dc; --amber:#e8a33d; --amber-bg:#2c2415;
+    --good:#5fc295; --bad:#e8836f;
+    --banner:#18223a; --bannerfg:#eaf0f8; --bannerdim:#b4c4dc; --bannerkick:#8aa3c6;
+    --thbg:#2b3952; --thfg:#e7ecf4; --btnfg:#0f141c;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161f; --surface:#1a212d; --surface2:#222b39; --tint:#1e2633;
+  --ink:#e7ecf4; --muted:#a3b0c4; --faint:#7d8a9e;
+  --line:#2f3a4c; --line2:#3d4a5e;
+  --navy:#8fb0dd; --blue:#7aa6dc; --amber:#e8a33d; --amber-bg:#2c2415;
+  --good:#5fc295; --bad:#e8836f;
+  --banner:#18223a; --bannerfg:#eaf0f8; --bannerdim:#b4c4dc; --bannerkick:#8aa3c6;
+  --thbg:#2b3952; --thfg:#e7ecf4; --btnfg:#0f141c;
+  --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.28);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:400 16px/1.55 Inter, "Helvetica Neue", Arial, sans-serif;
+  -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:1080px; margin:0 auto;
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));}
+h1,h2,h3{text-wrap:balance; margin:0}
+a{color:var(--blue)}
+
+/* ── banner ─────────────────────────────────────────── */
+.banner{background:var(--banner); color:var(--bannerfg)}
+.banner .wrap{padding-block:26px 30px}
+.kicker{font-size:12.5px; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--bannerkick); font-weight:600}
+.banner h1{font:600 clamp(28px,5.2vw,44px)/1.1 "Source Serif 4", Georgia, serif;
+  color:var(--bannerfg); margin:10px 0 12px}
+.banner p{margin:0; max-width:62ch; color:var(--bannerdim); font-size:15.5px}
+.runorder{display:flex; flex-wrap:wrap; gap:6px; margin-top:18px}
+.runorder span{font-size:12.5px; padding:4px 9px; border-radius:999px;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.16);
+  color:#dbe6f4; white-space:nowrap}
+
+/* ── sticky grade bar ───────────────────────────────── */
+.bar{position:sticky; top:env(safe-area-inset-top,0px); z-index:10;
+  background:var(--surface); border-bottom:1px solid var(--line)}
+body::before{content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px);
+  background:var(--surface); z-index:10}
+.bar .wrap{display:flex; flex-wrap:wrap; align-items:center; gap:10px 18px;
+  padding-block:9px}
+.pill{display:flex; align-items:baseline; gap:7px; font-size:13px; color:var(--muted);
+  min-width:0}
+.pill b{font:600 19px/1 "Source Serif 4", Georgia, serif; color:var(--ink);
+  font-variant-numeric:tabular-nums}
+.pill.on b{color:var(--navy)}
+.bar .spacer{flex:1 1 40px}
+.minibtn{font:500 13px/1 Inter,sans-serif; color:var(--blue); background:none;
+  border:1px solid var(--line2); border-radius:7px; padding:7px 11px; cursor:pointer}
+.minibtn:hover{background:var(--surface2)}
+
+/* ── sections ───────────────────────────────────────── */
+section{padding-block:34px 10px; scroll-margin-top:62px}
+@media (max-width:560px){ #jumpdl{display:none} }
+.step-h{display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-bottom:6px}
+.num{font:600 12.5px/1 Inter,sans-serif; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--amber); background:var(--amber-bg); border-radius:5px; padding:6px 9px}
+h2{font:600 clamp(21px,3.4vw,29px)/1.2 "Source Serif 4", Georgia, serif}
+.lead{color:var(--muted); max-width:70ch; margin:8px 0 18px; font-size:15.5px}
+.card{background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  box-shadow:var(--shadow)}
+.card-pad{padding:18px}
+hr.rule{border:0; border-top:1px solid var(--line); margin:34px 0 0}
+
+/* ── rubric table ───────────────────────────────────── */
+.tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px;
+  background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:14.5px}
+th,td{text-align:left; padding:11px 13px; border-bottom:1px solid var(--line);
+  vertical-align:top}
+thead th{background:var(--thbg); color:var(--thfg); font-weight:600; font-size:13px;
+  letter-spacing:.02em; border-bottom:0}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:var(--tint)}
+td.w{white-space:nowrap; font-variant-numeric:tabular-nums; color:var(--muted);
+  font-weight:600}
+td.ask{color:var(--muted); font-size:13.5px}
+.maths{margin-top:14px; padding:13px 15px; background:var(--surface2);
+  border-left:3px solid var(--blue); border-radius:0 8px 8px 0; font-size:14.5px}
+.maths code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13.5px}
+
+/* ── the proposal document ──────────────────────────── */
+.doc{font-family:"Source Serif 4", Georgia, serif; padding:20px 22px}
+.doc .dtitle{font-size:12px; letter-spacing:.11em; text-transform:uppercase;
+  font-family:Inter,sans-serif; color:var(--faint); font-weight:600;
+  margin:0 0 4px}
+.doc h4{font:600 13px/1.3 Inter,sans-serif; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--blue); margin:0 0 4px}
+.doc p{margin:0; font-size:16.5px; line-height:1.5; white-space:pre-line;
+  max-width:68ch}
+.doc .sec{break-inside:avoid; margin-bottom:17px}
+.doc .cols{margin-top:8px}
+@media (min-width:900px){
+  .doc .cols{columns:2; column-gap:38px; column-rule:1px solid var(--line)}
+  .doc .sec{display:inline-block; width:100%}
+}
+.stamp{display:inline-block; font:600 11.5px/1 Inter,sans-serif;
+  letter-spacing:.1em; text-transform:uppercase; padding:5px 8px; border-radius:5px;
+  background:var(--surface2); color:var(--muted); margin-bottom:2px}
+
+/* ── scoring grid ───────────────────────────────────── */
+.grid{display:flex; flex-direction:column; gap:10px}
+.row{background:var(--surface); border:1px solid var(--line); border-radius:11px;
+  padding:13px 15px}
+.row.scored{border-color:var(--line2)}
+.rowtop{display:flex; gap:12px; align-items:flex-start; flex-wrap:wrap}
+.rowlab{flex:1 1 220px; min-width:0}
+.rowlab .nm{font-weight:600; font-size:15px}
+.rowlab .wt{font-size:12.5px; color:var(--faint); font-weight:600;
+  letter-spacing:.04em}
+.score{display:flex; align-items:center; gap:11px; flex:1 1 230px; min-width:0}
+input[type=range]{flex:1 1 90px; min-width:0; accent-color:var(--blue); height:22px}
+.val{font:600 19px/1 "Source Serif 4", Georgia, serif; width:2.2ch;
+  text-align:right; font-variant-numeric:tabular-nums; color:var(--navy)}
+.val.empty{color:var(--faint); font-weight:400}
+.of{font-size:12.5px; color:var(--faint); margin-left:-7px}
+.disc{background:none; border:0; color:var(--blue); font:500 13px/1 Inter,sans-serif;
+  cursor:pointer; padding:6px 0; text-align:left}
+.disc:hover{text-decoration:underline}
+.extract{margin-top:10px; padding:12px 14px; background:var(--tint);
+  border:1px solid var(--line); border-radius:9px;
+  font-family:"Source Serif 4",Georgia,serif; font-size:15.5px; line-height:1.5;
+  white-space:pre-line}
+.extract .crit{display:block; font-family:Inter,sans-serif; font-size:13px;
+  color:var(--muted); margin-top:10px; padding-top:10px;
+  border-top:1px dashed var(--line2); white-space:normal}
+textarea,input[type=text]{width:100%; font:400 14.5px/1.45 Inter,sans-serif;
+  color:var(--ink); background:var(--tint); border:1px solid var(--line);
+  border-radius:8px; padding:9px 11px; resize:vertical}
+select{font:400 14.5px/1.45 Inter,sans-serif; color:var(--ink);
+  background:var(--tint); border:1px solid var(--line); border-radius:8px;
+  padding:9px 11px}
+textarea:focus,input[type=text]:focus,select:focus{outline:2px solid var(--blue);
+  outline-offset:-1px; background:var(--surface)}
+.notelab{display:block; font-size:12.5px; color:var(--faint); font-weight:600;
+  letter-spacing:.03em; margin:11px 0 4px}
+
+/* ── result tile ────────────────────────────────────── */
+.tile{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:1px; background:var(--line); border:1px solid var(--line);
+  border-radius:12px; overflow:hidden; margin-top:14px}
+.cell{background:var(--surface); padding:14px 16px}
+.cell.final{background:var(--surface2)}
+.cell .lb{font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--faint); font-weight:600}
+.cell .nb{font:600 32px/1.05 "Source Serif 4", Georgia, serif; margin-top:5px;
+  font-variant-numeric:tabular-nums}
+.cell .nb small{font-size:15px; color:var(--faint); font-weight:400}
+.cell .hint{font-size:12.5px; color:var(--muted); margin-top:4px}
+.pass{color:var(--good)} .fail{color:var(--bad)}
+
+/* ── gates & buttons ────────────────────────────────── */
+.btn{font:600 15px/1 Inter,sans-serif; color:var(--btnfg); background:var(--navy);
+  border:0; border-radius:9px; padding:13px 18px; cursor:pointer}
+.btn:disabled{background:var(--surface2); color:var(--faint); cursor:not-allowed}
+.btn.ghost{background:none; color:var(--blue); border:1px solid var(--line2)}
+.gate{text-align:center; padding:26px 18px; border:1px dashed var(--line2);
+  border-radius:12px; background:var(--tint)}
+.gate p{margin:0 0 14px; color:var(--muted); font-size:14.5px; max-width:52ch;
+  margin-inline:auto}
+
+/* ── the key ────────────────────────────────────────── */
+.verdict{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px; margin-bottom:16px}
+.vcard{border:1px solid var(--line); border-radius:12px; padding:16px;
+  background:var(--surface)}
+.vcard .t{font-size:12.5px; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--faint); font-weight:600}
+.vcard .big{font:600 38px/1 "Source Serif 4",Georgia,serif; margin:7px 0 2px;
+  font-variant-numeric:tabular-nums; color:var(--navy)}
+.vcard .d{font-size:13px; color:var(--muted)}
+.keyrow td.m{font:600 17px/1 "Source Serif 4",Georgia,serif; text-align:center;
+  font-variant-numeric:tabular-nums}
+.keyrow td.why{font-size:13.5px; color:var(--muted)}
+.deltaup{color:var(--good); font-weight:600} .deltadn{color:var(--bad); font-weight:600}
+ol.debrief{margin:16px 0 0; padding-left:22px}
+ol.debrief li{margin-bottom:10px; max-width:72ch}
+
+/* ── download ───────────────────────────────────────── */
+.dl{background:var(--surface); border:1px solid var(--line2); border-radius:12px;
+  padding:20px; margin-top:8px}
+.dlrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
+.ident{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px}
+.msg{font-size:13.5px; margin-top:12px; min-height:1.2em}
+.msg.ok{color:var(--good)} .msg.err{color:var(--bad)}
+
+footer{padding-block:28px 40px; color:var(--faint); font-size:13px}
+footer p{max-width:74ch; margin:0 0 7px}
+.sr{position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0)}
+</style>
+
+<div class="banner"><div class="wrap">
+  <div class="kicker">20128 · Writing and Execution of Projects · UIB</div>
+  <h1>You are the evaluation committee</h1>
+  <p>One hour. Score one proposal against the subject's own evaluation sheet, calibrate
+     your marks against two colleagues, then score the same proposal rewritten — and see
+     what the rewriting was worth. Everything you type stays in this browser; download your
+     completed sheet at the end.</p>
+  <div class="runorder">
+    <span>0:00 brief</span><span>0:05 score Draft A, in silence</span>
+    <span>0:20 calibrate, in threes</span><span>0:30 score Draft B</span>
+    <span>0:40 plenary</span><span>0:52 your own project</span>
+  </div>
+</div></div>
+
+<div class="bar"><div class="wrap">
+  <div class="pill" id="pA"><span>Draft A</span><b>—</b></div>
+  <div class="pill" id="pB"><span>Draft B</span><b>—</b></div>
+  <div class="pill" id="pO"><span>Your project</span><b>—</b></div>
+  <div class="spacer"></div>
+  <button class="minibtn" id="jumpdl">Download sheet</button>
+</div></div>
+
+<div class="wrap">
+
+<!-- 1 · the sheet -->
+<section id="s1">
+  <div class="step-h"><span class="num">The sheet</span><h2>What each line is worth</h2></div>
+  <p class="lead">This is the official evaluation sheet of the subject — the one that will be
+     used on your own written project. Block A, appearance, is 15 % of the grade; block B,
+     substance, is 85 %. Every section is scored from 0 to 10.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Block and section</th><th>Weight</th><th>What the evaluator asks</th></tr></thead>
+    <tbody id="rubric"><tr><td>A · Appearance of the written project</td><td class="w">15 %</td><td class="ask">Illustrations and captions · citations, correctly and consistently formatted · writing style · organisation and flow · concision · quality of the English.</td></tr><tr><td>B · Title</td><td class="w">2.5 %</td><td class="ask">Is the title a specific summary of the proposed work?</td></tr><tr><td>B · Abstract</td><td class="w">2.5 %</td><td class="ask">Does it give a brief summary of the proposal? Does it summarise the hypothesis and the goals?</td></tr><tr><td>B · Introduction</td><td class="w">20 %</td><td class="ask">Enough background to educate the evaluator? Adequate review of the literature and technical detail? Does the text show understanding? Is the novelty or importance made clear?</td></tr><tr><td>B · Objectives</td><td class="w">20 %</td><td class="ask">Do they define the scope? Is there a clear statement of the objectives, and of the hypothesis to be tested or the questions to be answered?</td></tr><tr><td>B · Methods + work plan + expected results</td><td class="w">40 %</td><td class="ask">Described in adequate depth — thorough but not excessive? Is the approach plausible and adequate to the objectives? Is the management plan plausible, are the phases and the division of responsibilities adequate? Do they specify what they will deliver?</td></tr><tr><td>B · Budget</td><td class="w">15 %</td><td class="ask">Properly written, distinguishing direct and indirect costs? Is every item justified? Do they have the resources to do it in the stated time and cost?</td></tr></tbody>
+  </table></div>
+  <div class="maths"><strong>The arithmetic.</strong> Block B is the weighted average of its six
+     sections. <code>Final grade = 0.15 × A + 0.85 × B</code>. The page does it live, but do it
+     once by hand: it is the only way to feel how little the title is worth and how much the
+     methods block is. The written project must reach 5, and it is 30 % of the mark of the subject.</div>
+</section>
+
+<hr class="rule">
+
+<!-- 2 · draft A -->
+<section id="s2">
+  <div class="step-h"><span class="num">Round 1 · 15 min</span><h2>Score Draft A, on your own</h2></div>
+  <p class="lead">Read it once straight through before you write a single number. Then score every
+     line and write one sentence per section — that sentence is the comment box on the real sheet.
+     No discussion yet: a committee member who has already heard someone else's mark cannot give
+     an independent one.</p>
+  <div class="card doc" id="docA"><div class="stamp">Draft A · as submitted</div><p class="dtitle">Proposal to the committee</p><div class="cols"><div class="sec"><h4>Title</h4><p>Bats and light pollution.</p></div><div class="sec"><h4>Abstract</h4><p>Light pollution is an increasing problem worldwide. This project will study the effects of artificial light on bats. Bats are important bioindicators of environmental quality. The results obtained will contribute to the knowledge of this subject and will be useful for managers and for society in general.</p></div><div class="sec"><h4>Introduction</h4><p>Artificial light at night has increased greatly in recent decades and affects many organisms. Bats are nocturnal mammals and are therefore especially sensitive. Several authors have studied this question. In Mallorca there are many bat species and much of the island is illuminated. For all these reasons it is important to study this topic.</p></div><div class="sec"><h4>Objectives</h4><p>1. To carry out acoustic surveys in illuminated and dark areas.
+2. To analyse the data obtained.
+3. To raise awareness among the public about light pollution.</p></div><div class="sec"><h4>Methods</h4><p>Acoustic recorders will be placed in several locations of the island. The recordings will be analysed with specialised software. Statistical analyses will be performed in order to compare the different areas.</p></div><div class="sec"><h4>Work plan</h4><p>The project will last 12 months. The team will carry out the fieldwork, the analysis and the dissemination.</p></div><div class="sec"><h4>Expected results</h4><p>We expect to obtain interesting results about the effect of light on bats. The results will be published and presented at a congress.</p></div><div class="sec"><h4>Budget</h4><p>Personnel 20 000 € · Equipment 10 000 € · Travel 5 000 € · Other expenses 5 000 € · TOTAL 40 000 €.</p></div></div></div>
+  <div class="grid" id="gridA" style="margin-top:16px"><div class="row" data-id="app"><div class="rowtop"><div class="rowlab"><div class="nm">A · Appearance of the written project</div><div class="wt">15 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Appearance of the written project score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden="">Appearance is judged on the document as a whole, not on one section.
+
+<span class="crit">Illustrations and captions · citations, correctly and consistently formatted · writing style · organisation and flow · concision · quality of the English.</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="title"><div class="rowtop"><div class="rowlab"><div class="nm">B · Title</div><div class="wt">2.5 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Title score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Title. </strong>Bats and light pollution.
+
+<span class="crit">Is the title a specific summary of the proposed work?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="abs"><div class="rowtop"><div class="rowlab"><div class="nm">B · Abstract</div><div class="wt">2.5 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Abstract score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Abstract. </strong>Light pollution is an increasing problem worldwide. This project will study the effects of artificial light on bats. Bats are important bioindicators of environmental quality. The results obtained will contribute to the knowledge of this subject and will be useful for managers and for society in general.
+
+<span class="crit">Does it give a brief summary of the proposal? Does it summarise the hypothesis and the goals?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="intro"><div class="rowtop"><div class="rowlab"><div class="nm">B · Introduction</div><div class="wt">20 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Introduction score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Introduction. </strong>Artificial light at night has increased greatly in recent decades and affects many organisms. Bats are nocturnal mammals and are therefore especially sensitive. Several authors have studied this question. In Mallorca there are many bat species and much of the island is illuminated. For all these reasons it is important to study this topic.
+
+<span class="crit">Enough background to educate the evaluator? Adequate review of the literature and technical detail? Does the text show understanding? Is the novelty or importance made clear?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="obj"><div class="rowtop"><div class="rowlab"><div class="nm">B · Objectives</div><div class="wt">20 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Objectives score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Objectives. </strong>1. To carry out acoustic surveys in illuminated and dark areas.
+2. To analyse the data obtained.
+3. To raise awareness among the public about light pollution.
+
+<span class="crit">Do they define the scope? Is there a clear statement of the objectives, and of the hypothesis to be tested or the questions to be answered?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="met"><div class="rowtop"><div class="rowlab"><div class="nm">B · Methods + work plan + expected results</div><div class="wt">40 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Methods + work plan + expected results score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Methods. </strong>Acoustic recorders will be placed in several locations of the island. The recordings will be analysed with specialised software. Statistical analyses will be performed in order to compare the different areas.
+
+<strong>Work plan. </strong>The project will last 12 months. The team will carry out the fieldwork, the analysis and the dissemination.
+
+<strong>Expected results. </strong>We expect to obtain interesting results about the effect of light on bats. The results will be published and presented at a congress.
+
+<span class="crit">Described in adequate depth — thorough but not excessive? Is the approach plausible and adequate to the objectives? Is the management plan plausible, are the phases and the division of responsibilities adequate? Do they specify what they will deliver?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div><div class="row" data-id="bud"><div class="rowtop"><div class="rowlab"><div class="nm">B · Budget</div><div class="wt">15 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Budget score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><button class="disc" type="button">Show the text ▾</button><div class="extract" hidden=""><strong>Budget. </strong>Personnel 20 000 € · Equipment 10 000 € · Travel 5 000 € · Other expenses 5 000 € · TOTAL 40 000 €.
+
+<span class="crit">Properly written, distinguishing direct and indirect costs? Is every item justified? Do they have the resources to do it in the stated time and cost?</span></div><span class="notelab">The one sentence you would write to them</span><textarea rows="2" placeholder="e.g. the objectives are activities, not objectives"></textarea></div></div>
+  <div class="tile" id="tileA"><div class="cell"><div class="lb">Block A · appearance</div><div class="nb">—</div><div class="hint">15 % of the final grade</div></div><div class="cell"><div class="lb">Block B · substance</div><div class="nb">—</div><div class="hint">weighted average · still incomplete</div></div><div class="cell final"><div class="lb">Draft A · 0.15 A + 0.85 B</div><div class="nb">—</div><div class="hint">score every line to see it</div></div></div>
+</section>
+
+<hr class="rule">
+
+<!-- 3 · calibration -->
+<section id="s3">
+  <div class="step-h"><span class="num">Round 2 · 10 min</span><h2>In threes: find your widest disagreement</h2></div>
+  <p class="lead">Put the three sets of scores side by side. A committee has to produce one mark,
+     not three — notice what you had to give up to get there.</p>
+  <div class="card card-pad">
+    <div class="ident">
+      <div><span class="notelab">The section where you differed most</span>
+        <select id="calsec" style="width:100%"><option value="">— choose —</option><option value="app">A · Appearance of the written project</option><option value="title">B · Title</option><option value="abs">B · Abstract</option><option value="intro">B · Introduction</option><option value="obj">B · Objectives</option><option value="met">B · Methods + work plan + expected results</option><option value="bud">B · Budget</option></select></div>
+      <div><span class="notelab">The single number you agreed on</span>
+        <input type="text" id="calnum" inputmode="decimal" placeholder="0–10"></div>
+    </div>
+    <span class="notelab">The argument that changed someone's mind</span>
+    <textarea id="calarg" rows="3" placeholder="Write it in one or two sentences."></textarea>
+    <span class="notelab">Was the spread caused by the proposal, or by the three of you?</span>
+    <div id="calcause" style="display:flex; gap:16px; flex-wrap:wrap; font-size:14.5px"><label style="display: flex; gap: 7px; align-items: center; cursor: pointer;"><input type="radio" name="cause" value="The proposal was ambiguous">The proposal was ambiguous</label><label style="display: flex; gap: 7px; align-items: center; cursor: pointer;"><input type="radio" name="cause" value="We read the criterion differently">We read the criterion differently</label><label style="display: flex; gap: 7px; align-items: center; cursor: pointer;"><input type="radio" name="cause" value="Both, about equally">Both, about equally</label></div>
+    <p style="margin:12px 0 0; font-size:13.5px; color:var(--muted)">Only one of those two is in
+       the applicant's control. If the criterion was read differently, the fix is a clearer rubric;
+       if the proposal was ambiguous, the fix is a clearer proposal.</p>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 4 · draft B -->
+<section id="s4">
+  <div class="step-h"><span class="num">Round 3 · 10 min</span><h2>Now score Draft B, as a group</h2></div>
+  <p class="lead">Same project, same team, same money, same twelve months. Only the writing is
+     different. Score it line by line and note, in a few words, what moved it.</p>
+  <div class="gate" id="gateB">
+    <p>Draft B stays closed until Draft A has a mark on every line. The second half only works
+       if you have not read it first.</p>
+    <button class="btn" id="revealB" disabled="">Reveal Draft B</button>
+    <p id="gateBcount" style="margin:12px 0 0; font-size:13px">0 of 7 lines scored.</p>
+  </div>
+  <div id="wrapB" hidden="">
+    <div class="card doc" id="docB"></div>
+    <div class="grid" id="gridB" style="margin-top:16px"></div>
+    <div class="tile" id="tileB"></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 5 · the key -->
+<section id="s5">
+  <div class="step-h"><span class="num">Plenary · 12 min</span><h2>The marks the committee gave</h2></div>
+  <p class="lead">Say your two grades out loud first, and write the room's spread on the board.
+     The spread is as interesting as the marks.</p>
+  <div class="gate" id="gateK">
+    <p>Opens once both drafts are scored.</p>
+    <button class="btn" id="revealK" disabled="">Show the committee's marks</button>
+  </div>
+  <div id="wrapK" hidden="">
+    <div class="verdict" id="verdict"></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Section</th><th style="text-align:center">A</th>
+        <th style="text-align:center">B</th><th>Why</th></tr></thead>
+      <tbody id="keybody"></tbody>
+    </table></div>
+    <ol class="debrief">
+      <li><strong>Same project, same team, same money.</strong> On this sheet Draft A scores 2.9
+          and Draft B scores 7.4. Nothing about the science changed between them.</li>
+      <li><strong>The objectives moved from 2 to 8</strong>, and they are worth 20 % — one section
+          worth more than a whole grade point of the final mark.</li>
+      <li><strong>Methods, work plan and expected results are 40 %</strong>: more than the
+          introduction and the objectives together, and the section most people write last and
+          shortest.</li>
+      <li><strong>Appearance is 15 % and it is the cheapest mark on the sheet</strong> — captions,
+          consistent citations, nothing padded. Nobody should lose it.</li>
+    </ol>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 6 · own project -->
+<section id="s6">
+  <div class="step-h"><span class="num">Last · 8 min</span><h2>And now your own project</h2></div>
+  <p class="lead">On your own, honestly, on the same sheet. For every section below 7, write the one
+     thing that is missing. The section where you cannot honestly give yourself a 7 is the section
+     to rewrite first.</p>
+  <div class="grid" id="gridO"><div class="row" data-id="app"><div class="rowtop"><div class="rowlab"><div class="nm">A · Appearance of the written project</div><div class="wt">15 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Appearance of the written project score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="title"><div class="rowtop"><div class="rowlab"><div class="nm">B · Title</div><div class="wt">2.5 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Title score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="abs"><div class="rowtop"><div class="rowlab"><div class="nm">B · Abstract</div><div class="wt">2.5 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Abstract score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="intro"><div class="rowtop"><div class="rowlab"><div class="nm">B · Introduction</div><div class="wt">20 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Introduction score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="obj"><div class="rowtop"><div class="rowlab"><div class="nm">B · Objectives</div><div class="wt">20 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Objectives score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="met"><div class="rowtop"><div class="rowlab"><div class="nm">B · Methods + work plan + expected results</div><div class="wt">40 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Methods + work plan + expected results score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div><div class="row" data-id="bud"><div class="rowtop"><div class="rowlab"><div class="nm">B · Budget</div><div class="wt">15 % · scored 0–10</div></div><div class="score"><input type="range" min="0" max="10" step="1" aria-label="Budget score out of 10"><span class="val empty">–</span><span class="of">/10</span></div></div><span class="notelab">If it is below 7, what is missing</span><textarea rows="2" placeholder="e.g. no power analysis, no named partner"></textarea></div></div>
+  <div class="tile" id="tileO"><div class="cell"><div class="lb">Block A · appearance</div><div class="nb">—</div><div class="hint">15 % of the final grade</div></div><div class="cell"><div class="lb">Block B · substance</div><div class="nb">—</div><div class="hint">weighted average · still incomplete</div></div><div class="cell final"><div class="lb">Your project · 0.15 A + 0.85 B</div><div class="nb">—</div><div class="hint">score every line to see it</div></div></div>
+</section>
+
+<hr class="rule">
+
+<!-- 7 · download -->
+<section id="s7">
+  <div class="step-h"><span class="num">Hand in</span><h2>Download your committee sheet</h2></div>
+  <p class="lead">One sheet per group, and a copy of the activity for each of you to keep. Both
+     files open in any browser, with no account and no connection.</p>
+  <div class="dl">
+    <div class="ident">
+      <div><span class="notelab">Committee (the three names)</span>
+        <input type="text" id="idnames" placeholder="e.g. Pons · Serra · Alomar"></div>
+      <div><span class="notelab">Group</span>
+        <input type="text" id="idgroup" placeholder="e.g. Group 4, Tuesday"></div>
+    </div>
+    <div class="dlrow">
+      <button class="btn" id="dlhtml">Download the completed sheet</button>
+      <button class="btn ghost" id="dlcsv">Scores only (CSV)</button>
+      <button class="btn ghost" id="dlpage">Download the whole activity</button>
+      <button class="btn ghost" id="reset">Clear everything</button>
+    </div>
+    <p style="margin:14px 0 0; font-size:13.5px; color:var(--muted)">
+      <strong>The completed sheet</strong> is what you hand in: both sets of scores, your
+      comments and your own-project marks, on one printable page.
+      <strong>The whole activity</strong> saves this page itself, with everything you have typed
+      inside it — it opens offline, keeps working, and is yours to keep after the class.</p>
+    <div class="msg" id="dlmsg" role="status"></div>
+  </div>
+</section>
+
+<footer>
+  <p><strong>Source.</strong> The official evaluation sheet of the subject, EVALUATION PROJECT
+     (WRITTEN): block A appearance 15 %, block B substance 85 %, every section scored 0 to 10.
+     Final grade = 0.15 × A + 0.85 × B.</p>
+  <p><strong>The proposal in both drafts is invented.</strong> The lighting figure, the species and
+     the LED replacement programme are plausible for Mallorca, but they are not citations — do not
+     quote them.</p>
+  <p>Universitat de les Illes Balears · Degree in Biology · 20128 Writing and Execution of
+     Projects · 2026–27</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+const CRIT=[
+ {id:"app",nm:"Appearance of the written project",block:"A",w:15,
+  ask:"Illustrations and captions · citations, correctly and consistently formatted · writing style · organisation and flow · concision · quality of the English.",
+  sec:[]},
+ {id:"title",nm:"Title",block:"B",w:2.5,
+  ask:"Is the title a specific summary of the proposed work?",sec:["Title"]},
+ {id:"abs",nm:"Abstract",block:"B",w:2.5,
+  ask:"Does it give a brief summary of the proposal? Does it summarise the hypothesis and the goals?",
+  sec:["Abstract"]},
+ {id:"intro",nm:"Introduction",block:"B",w:20,
+  ask:"Enough background to educate the evaluator? Adequate review of the literature and technical detail? Does the text show understanding? Is the novelty or importance made clear?",
+  sec:["Introduction"]},
+ {id:"obj",nm:"Objectives",block:"B",w:20,
+  ask:"Do they define the scope? Is there a clear statement of the objectives, and of the hypothesis to be tested or the questions to be answered?",
+  sec:["Objectives"]},
+ {id:"met",nm:"Methods + work plan + expected results",block:"B",w:40,
+  ask:"Described in adequate depth — thorough but not excessive? Is the approach plausible and adequate to the objectives? Is the management plan plausible, are the phases and the division of responsibilities adequate? Do they specify what they will deliver?",
+  sec:["Methods","Work plan","Expected results"]},
+ {id:"bud",nm:"Budget",block:"B",w:15,
+  ask:"Properly written, distinguishing direct and indirect costs? Is every item justified? Do they have the resources to do it in the stated time and cost?",
+  sec:["Budget"]}
+];
+
+const A={Title:"Bats and light pollution.",
+Abstract:"Light pollution is an increasing problem worldwide. This project will study the effects of artificial light on bats. Bats are important bioindicators of environmental quality. The results obtained will contribute to the knowledge of this subject and will be useful for managers and for society in general.",
+Introduction:"Artificial light at night has increased greatly in recent decades and affects many organisms. Bats are nocturnal mammals and are therefore especially sensitive. Several authors have studied this question. In Mallorca there are many bat species and much of the island is illuminated. For all these reasons it is important to study this topic.",
+Objectives:"1. To carry out acoustic surveys in illuminated and dark areas.\n2. To analyse the data obtained.\n3. To raise awareness among the public about light pollution.",
+Methods:"Acoustic recorders will be placed in several locations of the island. The recordings will be analysed with specialised software. Statistical analyses will be performed in order to compare the different areas.",
+"Work plan":"The project will last 12 months. The team will carry out the fieldwork, the analysis and the dissemination.",
+"Expected results":"We expect to obtain interesting results about the effect of light on bats. The results will be published and presented at a congress.",
+Budget:"Personnel 20 000 € · Equipment 10 000 € · Travel 5 000 € · Other expenses 5 000 € · TOTAL 40 000 €."};
+
+const B={Title:"Does street lighting displace bat activity along Mallorcan torrents? A paired acoustic study of three insectivorous species.",
+Abstract:"Torrents are the main foraging corridors for insectivorous bats in Mallorca, and 41 % of their length within 500 m of urban edges is now lit. We will test whether lighting reduces activity of Pipistrellus pygmaeus, Hypsugo savii and Miniopterus schreibersii, using 12 lit–dark paired reaches sampled over two seasons. The project will produce an activity model, a map of the reaches where lighting change would matter most, and a lighting recommendation for the two councils that own them. 12 months, 39 400 €.",
+Introduction:"Artificial light at night has grown by about 2 % a year in Europe and is now recognised as a driver of insect and bat decline (Hölker et al. 2010; Azam et al. 2018). Species respond in opposite directions: some feed at lamps, others abandon lit corridors altogether. In the Balearics the distribution of the fourteen resident species is known, but no study has measured activity against a lighting gradient, and the island's councils are replacing sodium lamps with LED without an ecological criterion. That replacement programme is the reason to do this now: it is a chance to inform a decision that is being taken anyway.",
+Objectives:"GENERAL. Quantify the effect of street lighting on bat activity along Mallorcan torrents, and turn the result into a lighting criterion the councils can apply.\nSO1. By month 8, measure activity of the three target species at 12 paired lit–dark reaches, 10 nights per reach per season.\nSO2. By month 11, deliver a map of the reaches where a lighting change would produce the largest predicted gain in activity.\nHYPOTHESIS. Activity of M. schreibersii falls by more than half in lit reaches, while P. pygmaeus does not differ.",
+Methods:"Twelve pairs of 200 m reaches, each pair matched for vegetation structure and channel width, one lit and one dark. Full-spectrum recorders deployed for 10 consecutive nights per reach in spring and in late summer. Automatic classification with manual validation of 10 % of passes. Activity modelled as passes per night with a generalised linear mixed model, pair as a random effect, with illuminance, moon phase and temperature as covariates. A power analysis on pilot data gives 80 % power to detect a 40 % difference with 12 pairs.",
+"Work plan":"M1–M2 site selection and permits (the Conselleria licence takes six weeks). M3–M8 two field seasons, two people per deployment. M6–M10 classification and modelling. M10–M12 map, report and a session with the two councils. Risks: a wet spring (mitigation — the second season is the replicate), and equipment theft (mitigation — six spare recorders, sites not signposted).",
+"Expected results":"An activity model for three species across a measured lighting gradient; a map of 12 reaches ranked by predicted gain; one paper; and a two-page lighting criterion delivered to the councils of Sóller and Bunyola, who have agreed to receive it.",
+Budget:"DIRECT 32 800 €: personnel 18 600 € (1 technician, 9 months, employer's cost); 6 recorders + microphones 8 400 €; travel and subsistence for 48 deployments 3 200 €; licences and validation 1 400 €; printing and the councils' session 1 200 €. INDIRECT 6 600 € (20 %). TOTAL 39 400 €. Unit cost: 1 640 € per reach surveyed."};
+
+const KEY={
+ app:{a:4,b:8,
+  wa:"Nothing is wrong with the prose, and that is all that can be said. No figure, no table, no citation anywhere; the writing is grammatical and empty. A 4 is generous — it is the mark for 'competent but contributes nothing'.",
+  wb:"Citations present and consistent, prose concise, each section doing its own job. Not a 10: the extract carries no figure, and a real submission would be expected to show the map and the chronogram."},
+ title:{a:3,b:8,
+  wa:"'Bats and light pollution' is a topic, not a summary of the proposed work. It names neither the system, nor the place, nor what will be done.",
+  wb:"Names the question, the system, the place and the design. Long — but a title is allowed to be long if every word works."},
+ abs:{a:3,b:8,
+  wa:"Four sentences and not one of them says what the project will do. No hypothesis, no goals, no design, no figures. 'Useful for society in general' is the giveaway.",
+  wb:"Problem, figure, hypothesis, design, products, duration and cost, in six sentences. Readable on its own, which is the test."},
+ intro:{a:3,b:7,
+  wa:"'Several authors have studied this question', with no author named. No numbers, no gap identified, no reason why now. It shows the subject was read about, not understood.",
+  wb:"Numbers with sources, the two opposite responses, the gap stated plainly, and a real reason why now — the LED replacement programme. Short of an 8 only because the literature review is three citations deep."},
+ obj:{a:2,b:8,
+  wa:"All three are activities, not objectives, and the third belongs in dissemination rather than in the objectives at all. No hypothesis, no question, no scope. This is the lowest mark on the sheet and it should be.",
+  wb:"A general objective that names a result, two specific ones with a figure and a date, and a hypothesis that could turn out to be false. This is the section that moved furthest."},
+ met:{a:3,b:7,
+  wa:"'Several locations', 'specialised software', 'statistical analyses' — nobody could repeat this, and nobody can judge whether it would answer a question that was never asked. The work plan is one sentence with no phases and no responsibilities. 'Interesting results' is not an expected result.",
+  wb:"Paired design with matching criteria, a stated effort, a named analysis with the random effect, and a power analysis — someone could repeat this. The work plan has phases, people and two risks with mitigations. Held at 7 because the validation protocol is one line and the councils' session is asserted rather than scheduled."},
+ bud:{a:2,b:7,
+  wa:"Four round numbers, no direct/indirect split, no justification, and no link to any task. 20 000 € of personnel for an unspecified number of people over an unspecified time.",
+  wb:"Direct and indirect separated, every line attached to an activity, the employer's cost named, and a unit cost given. Held at 7 because the 20 % indirect rate is stated but not justified against the call."}
+};
+
+const CAUSES=["The proposal was ambiguous","We read the criterion differently","Both, about equally"];
+const KEYSTORE="uib20128.evalcommittee.v1";
+
+const st={names:"",group:"",cause:"",calsec:"",calnum:"",calarg:"",
+  revealB:false,revealK:false,
+  a:{s:{},n:{}},b:{s:{},n:{}},o:{s:{},n:{}}};
+
+function load(){
+  let o=null;
+  try{const raw=localStorage.getItem(KEYSTORE); if(raw)o=JSON.parse(raw);}catch(e){}
+  if(!o && window.__SEED && typeof window.__SEED==="object") o=window.__SEED;
+  if(o && typeof o==="object") Object.assign(st,o);
+}
+let saveT=null;
+function save(){
+  clearTimeout(saveT);
+  saveT=setTimeout(()=>{try{localStorage.setItem(KEYSTORE,JSON.stringify(st));}catch(e){}},250);
+}
+const $=s=>document.querySelector(s);
+const el=(t,c,x)=>{const n=document.createElement(t); if(c)n.className=c;
+  if(x!==undefined)n.textContent=x; return n;};
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ── rubric table ─────────────────────────────────── */
+(function(){
+  const tb=$("#rubric");
+  tb.innerHTML="";
+  CRIT.forEach(c=>{
+    const tr=el("tr");
+    tr.appendChild(el("td",null,(c.block==="A"?"A · ":"B · ")+c.nm));
+    tr.appendChild(el("td","w",(c.w%1?c.w.toFixed(1):c.w)+" %"));
+    tr.appendChild(el("td","ask",c.ask));
+    tb.appendChild(tr);
+  });
+})();
+
+/* ── proposal documents ───────────────────────────── */
+function renderDoc(host,data,stamp,label){
+  host.innerHTML="";
+  host.appendChild(el("div","stamp",stamp));
+  host.appendChild(el("p","dtitle",label));
+  const cols=el("div","cols");
+  Object.keys(data).forEach(k=>{
+    const s=el("div","sec");
+    s.appendChild(el("h4",null,k));
+    s.appendChild(el("p",null,data[k]));
+    cols.appendChild(s);
+  });
+  host.appendChild(cols);
+}
+renderDoc($("#docA"),A,"Draft A · as submitted","Proposal to the committee");
+
+/* ── scoring grids ────────────────────────────────── */
+function buildGrid(host,phase,data,noteLabel,notePh){
+  host.innerHTML="";
+  CRIT.forEach(c=>{
+    const row=el("div","row"); row.dataset.id=c.id;
+    const top=el("div","rowtop");
+    const lab=el("div","rowlab");
+    lab.appendChild(el("div","nm",(c.block==="A"?"A · ":"B · ")+c.nm));
+    lab.appendChild(el("div","wt",(c.w%1?c.w.toFixed(1):c.w)+" % · scored 0–10"));
+    top.appendChild(lab);
+
+    const sc=el("div","score");
+    const rg=document.createElement("input");
+    rg.type="range"; rg.min="0"; rg.max="10"; rg.step="1";
+    const cur=st[phase].s[c.id];
+    rg.value=(cur===undefined||cur===null)?"5":cur;
+    rg.setAttribute("aria-label",c.nm+" score out of 10");
+    const val=el("span","val"+(cur===undefined||cur===null?" empty":""),
+                 (cur===undefined||cur===null)?"–":String(cur));
+    sc.appendChild(rg); sc.appendChild(val); sc.appendChild(el("span","of","/10"));
+    top.appendChild(sc);
+    row.appendChild(top);
+
+    if(data){
+      const d=el("button","disc","Show the text ▾"); d.type="button";
+      const ex=el("div","extract"); ex.hidden=true;
+      c.sec.forEach(s=>{
+        const h=el("strong",null,s+". "); ex.appendChild(h);
+        ex.appendChild(document.createTextNode(data[s]+"\n\n"));
+      });
+      if(!c.sec.length) ex.appendChild(document.createTextNode(
+        "Appearance is judged on the document as a whole, not on one section.\n\n"));
+      const cr=el("span","crit",c.ask); ex.appendChild(cr);
+      d.onclick=()=>{ex.hidden=!ex.hidden; d.textContent=ex.hidden?"Show the text ▾":"Hide the text ▴";};
+      row.appendChild(d); row.appendChild(ex);
+    }
+
+    const nl=el("span","notelab",noteLabel); row.appendChild(nl);
+    const ta=document.createElement("textarea");
+    ta.rows=2; ta.placeholder=notePh; ta.value=st[phase].n[c.id]||"";
+    ta.oninput=()=>{st[phase].n[c.id]=ta.value; save();};
+    row.appendChild(ta);
+
+    const commit=()=>{
+      const v=parseInt(rg.value,10);
+      if(st[phase].s[c.id]===v && !val.classList.contains("empty")) return;
+      st[phase].s[c.id]=v; val.textContent=String(v);
+      val.classList.remove("empty"); row.classList.add("scored");
+      recompute(); save();
+    };
+    rg.addEventListener("input",commit);
+    rg.addEventListener("change",commit);
+    rg.addEventListener("pointerup",commit);
+    rg.addEventListener("keyup",commit);
+    rg.addEventListener("click",commit);
+    if(cur!==undefined&&cur!==null) row.classList.add("scored");
+    host.appendChild(row);
+  });
+}
+
+/* ── arithmetic ───────────────────────────────────── */
+function grades(phase){
+  const s=st[phase].s;
+  const a=s.app;
+  let num=0,den=0;
+  CRIT.filter(c=>c.block==="B").forEach(c=>{
+    if(s[c.id]!==undefined&&s[c.id]!==null){num+=s[c.id]*c.w; den+=c.w;}
+  });
+  const bComplete=den===100, aHas=(a!==undefined&&a!==null);
+  const bAvg=den?num/den:null;
+  const final=(aHas&&bComplete)?0.15*a+0.85*bAvg:null;
+  const n=CRIT.filter(c=>s[c.id]!==undefined&&s[c.id]!==null).length;
+  return {a:aHas?a:null,b:bAvg,bComplete,final,n,complete:n===CRIT.length};
+}
+const f1=v=>v==null?"—":(Math.round(v*10)/10).toFixed(1);
+
+function tile(host,g,label){
+  host.innerHTML="";
+  const mk=(lb,nb,hint,cls)=>{
+    const c=el("div","cell"+(cls?" "+cls:""));
+    c.appendChild(el("div","lb",lb));
+    const n=el("div","nb"); n.textContent=nb;
+    if(nb!=="—")n.appendChild(el("small",null," /10"));
+    c.appendChild(n);
+    if(hint)c.appendChild(el("div","hint",hint));
+    host.appendChild(c);
+    return n;
+  };
+  mk("Block A · appearance",f1(g.a),"15 % of the final grade");
+  mk("Block B · substance",f1(g.b),
+     g.bComplete?"weighted average of its six sections"
+               :"weighted average · still incomplete");
+  const n=mk(label+" · 0.15 A + 0.85 B",f1(g.final),
+    g.final==null?"score every line to see it"
+      :(g.final>=5?"a pass — the project must reach 5"
+                  :"below 5 — the project must reach 5"),"final");
+  if(g.final!=null) n.classList.add(g.final>=5?"pass":"fail");
+}
+
+function recompute(){
+  const ga=grades("a"),gb=grades("b"),go=grades("o");
+  tile($("#tileA"),ga,"Draft A");
+  if(!$("#wrapB").hidden) tile($("#tileB"),gb,"Draft B");
+  tile($("#tileO"),go,"Your project");
+
+  const set=(sel,v,on)=>{const p=$(sel); p.querySelector("b").textContent=v;
+    p.classList.toggle("on",!!on);};
+  set("#pA",f1(ga.final),ga.final!=null);
+  set("#pB",f1(gb.final),gb.final!=null);
+  set("#pO",f1(go.final),go.final!=null);
+
+  const rb=$("#revealB");
+  rb.disabled=!ga.complete;
+  $("#gateBcount").textContent=ga.complete?"Draft A is fully scored.":
+    ga.n+" of "+CRIT.length+" lines scored.";
+  const rk=$("#revealK");
+  rk.disabled=!(ga.complete&&gb.complete);
+}
+
+/* ── calibration controls ─────────────────────────── */
+(function(){
+  const sel=$("#calsec");
+  sel.innerHTML="";
+  const o0=el("option",null,"— choose —"); o0.value=""; sel.appendChild(o0);
+  CRIT.forEach(c=>{const o=el("option",null,(c.block==="A"?"A · ":"B · ")+c.nm);
+    o.value=c.id; sel.appendChild(o);});
+  sel.value=st.calsec||""; sel.onchange=()=>{st.calsec=sel.value; save();};
+  const num=$("#calnum"); num.value=st.calnum||"";
+  num.oninput=()=>{st.calnum=num.value; save();};
+  const arg=$("#calarg"); arg.value=st.calarg||"";
+  arg.oninput=()=>{st.calarg=arg.value; save();};
+  const host=$("#calcause");
+  host.innerHTML="";
+  CAUSES.forEach(c=>{
+    const lab=el("label"); lab.style.display="flex"; lab.style.gap="7px";
+    lab.style.alignItems="center"; lab.style.cursor="pointer";
+    const r=document.createElement("input"); r.type="radio"; r.name="cause";
+    r.value=c; r.checked=(st.cause===c);
+    r.onchange=()=>{st.cause=c; save();};
+    lab.appendChild(r); lab.appendChild(document.createTextNode(c));
+    host.appendChild(lab);
+  });
+})();
+
+/* ── gates ────────────────────────────────────────── */
+function openB(){
+  st.revealB=true; save();
+  $("#gateB").hidden=true; $("#wrapB").hidden=false;
+  if(!$("#gridB").children.length){
+    renderDoc($("#docB"),B,"Draft B · the same project, rewritten","Proposal to the committee");
+    buildGrid($("#gridB"),"b",B,"What moved it, in a few words",
+              "e.g. a hypothesis that could be false");
+  }
+  recompute();
+}
+function openK(){
+  st.revealK=true; save();
+  $("#gateK").hidden=true; $("#wrapK").hidden=false;
+  const ga=grades("a"),gb=grades("b");
+  const v=$("#verdict"); v.innerHTML="";
+  const card=(t,big,d)=>{const c=el("div","vcard");
+    c.appendChild(el("div","t",t)); c.appendChild(el("div","big",big));
+    c.appendChild(el("div","d",d)); v.appendChild(c);};
+  const cmp=(yours,theirs)=>{
+    const d=yours-theirs;
+    if(Math.abs(d)<0.05) return "The same mark, to one decimal.";
+    return (d>0?"More generous than the committee by ":"Harsher than the committee by ")+
+      f1(Math.abs(d))+" of a point.";
+  };
+  card("Draft A · the committee","2.9",
+    "Block A 4 · block B 2.65 · 0.15 × 4 + 0.85 × 2.65 = 2.85");
+  card("Draft A · you",f1(ga.final),cmp(ga.final,2.8525));
+  card("Draft B · the committee","7.4",
+    "Block A 8 · block B 7.25 · 0.15 × 8 + 0.85 × 7.25 = 7.36");
+  card("Draft B · you",f1(gb.final),cmp(gb.final,7.3625));
+
+  const tb=$("#keybody"); tb.innerHTML="";
+  CRIT.forEach(c=>{
+    const k=KEY[c.id];
+    const tr=el("tr","keyrow");
+    tr.appendChild(el("td",null,(c.block==="A"?"A · ":"B · ")+c.nm+
+      " ("+(c.w%1?c.w.toFixed(1):c.w)+" %)"));
+    const ta=el("td","m"); ta.appendChild(document.createTextNode(String(k.a)));
+    const ya=st.a.s[c.id];
+    if(ya!=null){const s=el("div"); s.style.cssText="font:400 11.5px/1.3 Inter,sans-serif;color:var(--faint)";
+      s.textContent="you "+ya; ta.appendChild(s);}
+    tr.appendChild(ta);
+    const tbd=el("td","m"); tbd.appendChild(document.createTextNode(String(k.b)));
+    const yb=st.b.s[c.id];
+    if(yb!=null){const s=el("div"); s.style.cssText="font:400 11.5px/1.3 Inter,sans-serif;color:var(--faint)";
+      s.textContent="you "+yb; tbd.appendChild(s);}
+    tr.appendChild(tbd);
+    const why=el("td","why");
+    why.appendChild(el("div",null,"A — "+k.wa));
+    const d2=el("div",null,"B — "+k.wb); d2.style.marginTop="6px";
+    why.appendChild(d2);
+    const mv=el("div"); mv.style.marginTop="6px";
+    mv.innerHTML='<span class="'+(k.b>k.a?"deltaup":"deltadn")+'">'+
+      (k.b>k.a?"+":"")+(k.b-k.a)+" on the same section</span>";
+    why.appendChild(mv);
+    tr.appendChild(why);
+    tb.appendChild(tr);
+  });
+}
+$("#revealB").onclick=openB;
+$("#revealK").onclick=openK;
+$("#jumpdl").onclick=()=>$("#s7").scrollIntoView({behavior:"smooth",block:"start"});
+
+/* ── the downloadable sheet ───────────────────────── */
+function stamp(){
+  const d=new Date();
+  return d.toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"})+
+    " · "+d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+}
+function slug(s){return (s||"").trim().replace(/[^A-Za-z0-9]+/g,"-")
+  .replace(/^-|-$/g,"").slice(0,40);}
+function rowsFor(phase){
+  return CRIT.map(c=>({nm:(c.block==="A"?"A · ":"B · ")+c.nm,
+    w:(c.w%1?c.w.toFixed(1):c.w)+" %",
+    s:st[phase].s[c.id]==null?"":st[phase].s[c.id],
+    n:st[phase].n[c.id]||""}));
+}
+function sheetHTML(){
+  const ga=grades("a"),gb=grades("b"),go=grades("o");
+  const secName=(CRIT.find(c=>c.id===st.calsec)||{}).nm||"—";
+  const T=(title,rows,noteHead)=>`<h2>${esc(title)}</h2><table>
+<thead><tr><th>Section</th><th>Weight</th><th>Score</th><th>${esc(noteHead)}</th></tr></thead>
+<tbody>${rows.map(r=>`<tr><td>${esc(r.nm)}</td><td class="w">${esc(r.w)}</td>
+<td class="s">${esc(r.s)}</td><td>${esc(r.n)}</td></tr>`).join("")}</tbody></table>`;
+  const G=(g,lab,ref)=>`<p class="g"><strong>${esc(lab)}</strong> · block A ${f1(g.a)}
+ · block B ${f1(g.b)} · <strong>final ${f1(g.final)}</strong> /10${ref?" · the committee gave "+ref:""}</p>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Evaluation committee sheet — 20128</title><style>
+body{font:15px/1.5 -apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+ color:#1f2a3d;max-width:900px;margin:0 auto;padding:28px 20px}
+h1{font-size:23px;margin:0 0 4px;color:#253760}
+h2{font-size:16px;margin:26px 0 6px;color:#253760;border-bottom:1px solid #d7dfeb;padding-bottom:4px}
+.meta{color:#5a6b85;font-size:13px;margin:0 0 18px}
+table{border-collapse:collapse;width:100%;font-size:13.5px;margin-bottom:6px}
+th,td{border:1px solid #d7dfeb;padding:6px 8px;text-align:left;vertical-align:top}
+th{background:#eef2f8;font-size:12.5px}
+td.w,td.s{white-space:nowrap;text-align:center;font-variant-numeric:tabular-nums}
+td.s{font-weight:700}
+p.g{background:#f4f6fa;border-left:3px solid #4173b0;padding:8px 11px;font-size:14px;margin:4px 0 0}
+dl{margin:6px 0 0}dt{font-weight:700;font-size:13px;color:#5a6b85;margin-top:8px}
+dd{margin:2px 0 0}
+footer{margin-top:26px;border-top:1px solid #d7dfeb;padding-top:10px;
+ color:#8695ac;font-size:12px}
+@media print{body{padding:0}h2{break-after:avoid}table{break-inside:auto}}
+</style></head><body>
+<h1>You are the evaluation committee — completed sheet</h1>
+<p class="meta">20128 Writing and Execution of Projects · Degree in Biology · Universitat de les
+ Illes Balears · 2026–27<br>Committee: <strong>${esc(st.names||"—")}</strong> ·
+ Group: <strong>${esc(st.group||"—")}</strong> · ${esc(stamp())}</p>
+${T("1 · Draft A, as submitted",rowsFor("a"),"The sentence we would write to them")}
+${G(ga,"Draft A",st.revealK?"2.9":"")}
+<h2>2 · Calibration, in threes</h2>
+<dl><dt>Section with the widest spread</dt><dd>${esc(secName)}</dd>
+<dt>The number we agreed on</dt><dd>${esc(st.calnum||"—")}</dd>
+<dt>The argument that changed someone's mind</dt><dd>${esc(st.calarg||"—")}</dd>
+<dt>Cause of the spread</dt><dd>${esc(st.cause||"—")}</dd></dl>
+${st.revealB?T("3 · Draft B, the same project rewritten",rowsFor("b"),"What moved it")+G(gb,"Draft B",st.revealK?"7.4":""):"<h2>3 · Draft B</h2><p>Not scored.</p>"}
+${T("4 · Our own project, on the same sheet",rowsFor("o"),"If below 7, what is missing")}
+${G(go,"Our own project","")}
+<footer>Final grade = 0.15 × block A + 0.85 × block B. Block B is the weighted average of its six
+ sections. The written project must reach 5 and is 30 % of the mark of the subject. The proposal in
+ both drafts is invented: the figures and the LED replacement programme are plausible for Mallorca
+ but are not citations.</footer></body></html>`;
+}
+function sheetCSV(){
+  const q=v=>'"'+String(v==null?"":v).replace(/"/g,'""')+'"';
+  const L=[["Section","Weight","Draft A","Draft B","Own project"].map(q).join(",")];
+  CRIT.forEach(c=>L.push([(c.block==="A"?"A · ":"B · ")+c.nm,
+    (c.w%1?c.w.toFixed(1):c.w)+" %",
+    st.a.s[c.id]==null?"":st.a.s[c.id],
+    st.b.s[c.id]==null?"":st.b.s[c.id],
+    st.o.s[c.id]==null?"":st.o.s[c.id]].map(q).join(",")));
+  const ga=grades("a"),gb=grades("b"),go=grades("o");
+  L.push("");
+  L.push(["Block A","",f1(ga.a),f1(gb.a),f1(go.a)].map(q).join(","));
+  L.push(["Block B weighted average","",f1(ga.b),f1(gb.b),f1(go.b)].map(q).join(","));
+  L.push(["Final grade 0.15A + 0.85B","",f1(ga.final),f1(gb.final),f1(go.final)].map(q).join(","));
+  L.push("");
+  L.push([q("Committee"),q(st.names)].join(","));
+  L.push([q("Group"),q(st.group)].join(","));
+  L.push([q("Widest spread"),q((CRIT.find(c=>c.id===st.calsec)||{}).nm||"")].join(","));
+  L.push([q("Agreed number"),q(st.calnum)].join(","));
+  L.push([q("Cause of the spread"),q(st.cause)].join(","));
+  L.push([q("Argument that changed a mind"),q(st.calarg)].join(","));
+  return "﻿"+L.join("\r\n");
+}
+
+/* The page saves a working copy of itself: the markup as it stands, plus a
+   seed of everything typed so far. It reopens offline and keeps running. */
+function activityHTML(){
+  const seed=JSON.stringify(st).replace(/</g,"\\u003c");
+  const body=document.body.innerHTML;
+  return '<!doctype html><html lang="en"><head><meta charset="utf-8">'+
+    '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">'+
+    '<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);'+
+    'padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;'+
+    'font:14px system-ui,-apple-system,Segoe UI,Roboto,sans-serif}'+
+    'img{max-width:100%}[hidden]{display:none!important}</style></head><body>'+
+    '<script>window.__SEED='+seed+';<\/script>'+body+'</body></html>';
+}
+
+let dlns=null;
+async function downloads(){
+  if(dlns) return dlns;
+  try{
+    dlns=(window.claude && typeof window.claude.use==="function")
+        ? await window.claude.use("downloads") : null;
+  }catch(e){ dlns=null; }
+  return dlns;
+}
+function msg(t,cls){const m=$("#dlmsg"); m.textContent=t;
+  m.className="msg"+(cls?" "+cls:"");}
+/* Outside the claude.ai viewer — in the downloaded copy — an ordinary
+   link does the job. Inside it, the capability does. */
+function plainSave(filename,data,label){
+  try{
+    const blob=new Blob([data],{type:"text/"+(filename.endsWith(".csv")?"csv":"html")});
+    const u=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=u; a.download=filename; document.body.appendChild(a); a.click();
+    setTimeout(()=>{URL.revokeObjectURL(u); a.remove();},1500);
+    msg(label+" saved as "+filename+".","ok");
+    return true;
+  }catch(e){ return false; }
+}
+async function offer(filename,data,label){
+  const d=await downloads();
+  if(!d){
+    if(plainSave(filename,data,label)) return;
+    msg("Saving a file is not available in this view. Open the page on claude.ai, or copy your scores by hand.","err");
+    return;
+  }
+  msg("Waiting for you to confirm the save…");
+  try{
+    const r=await d.save({filename,data});
+    msg(r.status==="saved"?label+" saved as "+filename:label+" sent to where you chose.","ok");
+  }catch(e){
+    const c=e&&e.code;
+    if(c==="declined") msg("Save cancelled — nothing left this page.");
+    else if(c==="rate_limited") msg("A save prompt is already open. Finish that one first.","err");
+    else msg("The file could not be saved ("+(c||"unknown")+"). Your answers are still here.","err");
+  }
+}
+$("#dlhtml").onclick=()=>{
+  const nm="Evaluation-committee-"+(slug(st.group)||slug(st.names)||"sheet")+".html";
+  offer(nm,sheetHTML(),"Your sheet");
+};
+$("#dlcsv").onclick=()=>{
+  const nm="Evaluation-committee-"+(slug(st.group)||slug(st.names)||"scores")+".csv";
+  offer(nm,sheetCSV(),"Your scores");
+};
+$("#dlpage").onclick=()=>{
+  const nm="Evaluation-committee-activity"+
+    (slug(st.group)?"-"+slug(st.group):"")+".html";
+  offer(nm,activityHTML(),"The activity");
+};
+$("#reset").onclick=()=>{
+  if($("#reset").dataset.armed!=="1"){
+    $("#reset").dataset.armed="1";
+    $("#reset").textContent="Clear everything — tap again to confirm";
+    setTimeout(()=>{$("#reset").dataset.armed="0";
+      $("#reset").textContent="Clear everything";},5000);
+    return;
+  }
+  try{localStorage.removeItem(KEYSTORE);}catch(e){}
+  location.reload();
+};
+
+/* ── identity fields ──────────────────────────────── */
+(function(){
+  const nm=$("#idnames"), gr=$("#idgroup");
+  nm.value=st.names||""; gr.value=st.group||"";
+  nm.oninput=()=>{st.names=nm.value; save();};
+  gr.oninput=()=>{st.group=gr.value; save();};
+})();
+
+/* ── boot ─────────────────────────────────────────── */
+load();
+buildGrid($("#gridA"),"a",A,"The one sentence you would write to them",
+          "e.g. the objectives are activities, not objectives");
+buildGrid($("#gridO"),"o",null,"If it is below 7, what is missing",
+          "e.g. no power analysis, no named partner");
+$("#idnames").value=st.names||""; $("#idgroup").value=st.group||"";
+$("#calsec").value=st.calsec||""; $("#calnum").value=st.calnum||"";
+$("#calarg").value=st.calarg||"";
+if(st.revealB) openB();
+recompute();
+if(st.revealK && !$("#revealK").disabled) openK();
+setTimeout(()=>{ if(!window.claude) return;
+  downloads().then(d=>{ if(!d){
+    msg("Saving a file may not be available in this view. If the buttons do nothing, open the page on claude.ai.","err");
+  }});
+},1500);
+</script>
+</body></html>
