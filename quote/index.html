@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Price the job, then invoice it</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+:root{
+  --bg:#f4f6fa; --surface:#fff; --surface2:#eef2f8; --tint:#f8fafd;
+  --ink:#1f2a3d; --muted:#5a6b85; --faint:#8695ac;
+  --line:#d7dfeb; --line2:#c2cee0;
+  --navy:#253760; --blue:#4173b0; --amber:#c87d12; --amber-bg:#fdf4e3;
+  --good:#1f7a52; --bad:#a53a2a;
+  --banner:#253760; --bannerfg:#fff; --bannerdim:#cfdcee; --bannerkick:#a8bcdb;
+  --thbg:#253760; --thfg:#fff; --btnfg:#fff;
+  --shadow:0 1px 2px rgba(31,42,61,.06),0 8px 24px rgba(31,42,61,.06);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#11161f; --surface:#1a212d; --surface2:#222b39; --tint:#1e2633;
+    --ink:#e7ecf4; --muted:#a3b0c4; --faint:#7d8a9e;
+    --line:#2f3a4c; --line2:#3d4a5e;
+    --navy:#8fb0dd; --blue:#7aa6dc; --amber:#e8a33d; --amber-bg:#2c2415;
+    --good:#5fc295; --bad:#e8836f;
+    --banner:#18223a; --bannerfg:#eaf0f8; --bannerdim:#b4c4dc; --bannerkick:#8aa3c6;
+    --thbg:#2b3952; --thfg:#e7ecf4; --btnfg:#0f141c;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#11161f; --surface:#1a212d; --surface2:#222b39; --tint:#1e2633;
+  --ink:#e7ecf4; --muted:#a3b0c4; --faint:#7d8a9e;
+  --line:#2f3a4c; --line2:#3d4a5e;
+  --navy:#8fb0dd; --blue:#7aa6dc; --amber:#e8a33d; --amber-bg:#2c2415;
+  --good:#5fc295; --bad:#e8836f;
+  --banner:#18223a; --bannerfg:#eaf0f8; --bannerdim:#b4c4dc; --bannerkick:#8aa3c6;
+  --thbg:#2b3952; --thfg:#e7ecf4; --btnfg:#0f141c;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.28);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 16px/1.55 Inter,"Helvetica Neue",Arial,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+.banner{background:var(--banner);color:var(--bannerfg)}
+.banner .wrap{padding-block:24px 28px}
+.kicker{font-size:12.5px;letter-spacing:.11em;text-transform:uppercase;color:var(--bannerkick);font-weight:600}
+.banner h1{font:600 clamp(27px,5vw,42px)/1.1 "Source Serif 4",Georgia,serif;color:var(--bannerfg);margin:10px 0 12px}
+.banner p{margin:0;max-width:64ch;color:var(--bannerdim);font-size:15.5px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--surface);z-index:10}
+.bar .wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;padding-block:9px}
+.pill{display:flex;align-items:baseline;gap:7px;font-size:13px;color:var(--muted);min-width:0}
+.pill b{font:600 18px/1 "Source Serif 4",Georgia,serif;color:var(--navy);font-variant-numeric:tabular-nums}
+.bar .spacer{flex:1 1 20px}
+section{padding-block:30px 8px;scroll-margin-top:62px}
+.step-h{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.num{font:600 12.5px/1 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border-radius:5px;padding:6px 9px}
+h2{font:600 clamp(21px,3.3vw,28px)/1.2 "Source Serif 4",Georgia,serif}
+.lead{color:var(--muted);max-width:72ch;margin:8px 0 16px;font-size:15.5px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:18px}
+hr.rule{border:0;border-top:1px solid var(--line);margin:30px 0 0}
+.mail{font-family:"Source Serif 4",Georgia,serif;font-size:16.5px;line-height:1.5}
+.mail dt{font:600 12px/1.4 Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-top:10px}
+.mail dd{margin:2px 0 0}
+/* sheet */
+.sheetwrap{overflow-x:auto;border:1px solid var(--line2);border-radius:10px;background:var(--surface)}
+table.sheet{border-collapse:collapse;width:100%;min-width:720px;font-size:14.5px;font-variant-numeric:tabular-nums}
+table.sheet th{background:var(--thbg);color:var(--thfg);font-weight:600;font-size:12.5px;letter-spacing:.03em;
+  text-align:left;padding:9px 10px;position:sticky;top:0}
+table.sheet td{border-top:1px solid var(--line);padding:4px 6px;vertical-align:middle}
+table.sheet tr:nth-child(even) td{background:var(--tint)}
+table.sheet input,table.sheet select{width:100%;font:400 14.5px/1.35 Inter,sans-serif;color:var(--ink);
+  background:transparent;border:1px solid transparent;border-radius:6px;padding:6px 7px}
+table.sheet input:hover,table.sheet select:hover{border-color:var(--line2)}
+table.sheet input:focus,table.sheet select:focus{outline:2px solid var(--blue);outline-offset:-1px;background:var(--surface)}
+td.n input{text-align:right;font-variant-numeric:tabular-nums}
+td.calc{text-align:right;font-weight:600;padding-right:12px;white-space:nowrap}
+td.del{width:34px;text-align:center}
+.del button{border:0;background:none;color:var(--faint);font-size:17px;line-height:1;cursor:pointer;padding:4px 6px;border-radius:6px}
+.del button:hover{color:var(--bad);background:var(--surface2)}
+tfoot td{border-top:2px solid var(--line2);font-weight:600;padding:9px 10px}
+tfoot td.calc{font-size:16px}
+tfoot tr.grand td{background:var(--surface2);font-size:17px}
+.addrow{margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:600 14.5px/1 Inter,sans-serif;color:var(--btnfg);background:var(--navy);border:0;border-radius:9px;padding:11px 16px;cursor:pointer}
+.btn:disabled{background:var(--surface2);color:var(--faint);cursor:not-allowed}
+.btn.ghost{background:none;color:var(--blue);border:1px solid var(--line2)}
+.btn.sm{font-size:13.5px;padding:9px 13px}
+.hint{font-size:13px;color:var(--muted)}
+textarea,input[type=text]{width:100%;font:400 14.5px/1.45 Inter,sans-serif;color:var(--ink);
+  background:var(--tint);border:1px solid var(--line);border-radius:8px;padding:9px 11px;resize:vertical}
+textarea:focus,input[type=text]:focus{outline:2px solid var(--blue);outline-offset:-1px;background:var(--surface)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.lbl{display:block;font-size:12.5px;color:var(--faint);font-weight:600;letter-spacing:.03em;margin:10px 0 4px}
+.gate{text-align:center;padding:24px 18px;border:1px dashed var(--line2);border-radius:12px;background:var(--tint)}
+.gate p{margin:0 0 14px;color:var(--muted);font-size:14.5px;max-width:56ch;margin-inline:auto}
+.choice{display:flex;gap:16px;flex-wrap:wrap;font-size:14.5px;margin-top:4px}
+.choice label{display:flex;gap:7px;align-items:center;cursor:pointer}
+.invoice{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.cell{background:var(--surface);padding:14px 16px}
+.cell.total{background:var(--surface2)}
+.cell .lb{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);font-weight:600}
+.cell .nb{font:600 27px/1.05 "Source Serif 4",Georgia,serif;margin-top:5px;font-variant-numeric:tabular-nums}
+.cell .hint{font-size:12.5px;margin-top:4px}
+.minus{color:var(--bad)}
+.model table{border-collapse:collapse;width:100%;font-size:14px;margin-top:10px}
+.model th,.model td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+.model th{background:var(--surface2);font-size:12.5px}
+.model td.n{text-align:right;font-variant-numeric:tabular-nums}
+ol.lessons{margin:14px 0 0;padding-left:22px}
+ol.lessons li{margin-bottom:9px;max-width:74ch}
+footer{padding-block:26px 40px;color:var(--faint);font-size:13px}
+footer p{max-width:76ch;margin:0 0 7px}
+@media print{
+  .bar,.addrow,.del,.gate,#printbtn,#clearbtn{display:none!important}
+  body{background:#fff}
+  .banner{background:#fff;color:#000}
+  .banner h1,.banner p,.kicker{color:#000}
+  section{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<div class="banner"><div class="wrap">
+  <div class="kicker">20128 · Block II · U7 · professional projects: consultancy</div>
+  <h1>Price the job, then invoice it</h1>
+  <p>A client emails on Monday. By the end of this sheet you will have quoted the job,
+     handled a change of scope and issued the invoice. Nothing is handed in: the sheet
+     works everything out as you type, and the model answer is at the bottom when you
+     want it.</p>
+</div></div>
+
+<div class="bar"><div class="wrap">
+  <div class="pill"><span>Fee</span><b id="pFee">0</b></div>
+  <div class="pill"><span>Variation</span><b id="pVar">0</b></div>
+  <div class="pill"><span>Invoice total</span><b id="pTot">0</b></div>
+  <div class="spacer"></div>
+  <button class="btn ghost sm" id="printbtn">Print</button>
+  <button class="btn ghost sm" id="clearbtn">Clear</button>
+</div></div>
+
+<div class="wrap">
+
+<!-- 1 -->
+<section id="s1">
+  <div class="step-h"><span class="num">The enquiry</span><h2>Monday, 09:14</h2></div>
+  <div class="card mail">
+    <dl style="margin:0">
+      <dt>From</dt><dd>Marta Serra, operations manager, Son Vell Aqüicultura SL</dd>
+      <dt>To</dt><dd>your consultancy</dd>
+      <dt>Subject</dt><dd>Posidonia survey before a mooring application</dd>
+      <dt>Message</dt>
+      <dd>We want to apply for six additional moorings for service boats in the bay where
+      our cages are. The Conselleria will ask us whether there is <i>Posidonia oceanica</i>
+      on the seabed and what condition it is in. We have nothing: no maps, no survey,
+      nothing. We need something we can submit with the application, and we would like it
+      before the end of May. What would you charge? Please send a quotation this week.</dd>
+    </dl>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 2 -->
+<section id="s2">
+  <div class="step-h"><span class="num">Step 1 · scope</span><h2>What the job is, and what it is not</h2></div>
+  <p class="lead">Three lines each. The second column is the one that protects you: everything
+     you do not exclude, you have agreed to do.</p>
+  <div class="two">
+    <div class="card">
+      <span class="lbl">In scope</span>
+      <textarea id="inScope" rows="6" placeholder="1.&#10;2.&#10;3."></textarea>
+    </div>
+    <div class="card">
+      <span class="lbl">Explicitly out of scope</span>
+      <textarea id="outScope" rows="6" placeholder="1.&#10;2.&#10;3."></textarea>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 3 -->
+<section id="s3">
+  <div class="step-h"><span class="num">Step 2 · the fee</span><h2>Build the number from the rate card</h2></div>
+  <p class="lead">Pick a resource, say how many, and the sheet does the arithmetic. Add as many
+     rows as the job needs. A client who cannot see how the number was built does not trust it.</p>
+  <div class="sheetwrap"><table class="sheet" id="quoteTbl">
+    <thead><tr>
+      <th style="width:30%">What it is for</th><th style="width:28%">Resource</th>
+      <th style="width:11%">Rate</th><th style="width:11%">Quantity</th>
+      <th style="width:16%;text-align:right">Cost</th><th></th>
+    </tr></thead>
+    <tbody></tbody>
+    <tfoot>
+      <tr><td colspan="4">Direct costs</td><td class="calc" id="qDirect">0,00 €</td><td></td></tr>
+      <tr><td colspan="4">Overhead, <input type="number" id="ohPct" value="15" min="0" max="60" step="1"
+            style="width:62px;text-align:right;border:1px solid var(--line2);border-radius:6px;padding:4px 6px;background:var(--tint)"> %</td>
+          <td class="calc" id="qOh">0,00 €</td><td></td></tr>
+      <tr class="grand"><td colspan="4">Fee, before tax</td><td class="calc" id="qFee">0,00 €</td><td></td></tr>
+    </tfoot>
+  </table></div>
+  <div class="addrow">
+    <button class="btn ghost sm" id="addQuote">Add a line</button>
+    <span class="hint">Travel and subsistence, laboratory samples and the boat are on the
+      resource list. Do not forget the days for reporting.</span>
+  </div>
+
+  <div class="two" style="margin-top:18px">
+    <div class="card">
+      <span class="lbl">Dates you can commit to</span>
+      <input type="text" id="tDates" placeholder="Start, finish, and the survey window">
+      <span class="lbl">What the client has to provide</span>
+      <input type="text" id="tClient" placeholder="Access, charts, previous permits…">
+    </div>
+    <div class="card">
+      <span class="lbl">Payment terms</span>
+      <input type="text" id="tPay" placeholder="e.g. 40 % on signature, 60 % on delivery, 30 days">
+      <span class="lbl">Validity of the quotation</span>
+      <input type="text" id="tValid" placeholder="e.g. 30 days">
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 4 -->
+<section id="s4">
+  <div class="step-h"><span class="num">Step 3 · the change</span><h2>The client replies</h2></div>
+  <div class="gate" id="gateMail">
+    <p>Open this only when your quotation is finished.</p>
+    <button class="btn" id="openMail">Open the second email</button>
+  </div>
+  <div id="mail2" hidden>
+    <div class="card mail">
+      <dl style="margin:0">
+        <dt>Thursday, 17:40</dt>
+        <dd>“Thank you for the quotation, we accept. One small thing: while you are out
+        there, could you also look at the two small coves to the north? It is the same bay
+        really. And the Conselleria has asked us for the data in their own GIS format.”</dd>
+      </dl>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <span class="lbl">Is this inside the scope you wrote?</span>
+      <div class="choice" id="scopeChoice"></div>
+      <span class="lbl">What do you do?</span>
+      <div class="choice" id="actChoice"></div>
+      <span class="lbl">What you write back, in two sentences</span>
+      <textarea id="reply" rows="3" placeholder="Keep it short, and name the price."></textarea>
+    </div>
+    <p class="lead" style="margin-top:18px">If it is extra work, price it on the same rate card.</p>
+    <div class="sheetwrap"><table class="sheet" id="varTbl">
+      <thead><tr>
+        <th style="width:30%">What it is for</th><th style="width:28%">Resource</th>
+        <th style="width:11%">Rate</th><th style="width:11%">Quantity</th>
+        <th style="width:16%;text-align:right">Cost</th><th></th>
+      </tr></thead>
+      <tbody></tbody>
+      <tfoot>
+        <tr><td colspan="4">Direct costs</td><td class="calc" id="vDirect">0,00 €</td><td></td></tr>
+        <tr><td colspan="4">Overhead, same rate</td><td class="calc" id="vOh">0,00 €</td><td></td></tr>
+        <tr class="grand"><td colspan="4">Variation</td><td class="calc" id="vFee">0,00 €</td><td></td></tr>
+      </tfoot>
+    </table></div>
+    <div class="addrow"><button class="btn ghost sm" id="addVar">Add a line</button></div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- 5 -->
+<section id="s5">
+  <div class="step-h"><span class="num">Step 4 · the invoice</span><h2>Issue it</h2></div>
+  <p class="lead">A Spanish invoice is a legal document, and its contents are set by
+     Real Decreto 1619/2012. Two tax lines run in opposite directions: IVA is added,
+     and the IRPF retention is subtracted and paid to the tax office by your client.</p>
+  <div class="two">
+    <div class="card">
+      <span class="lbl">Invoice number and date</span>
+      <input type="text" id="iNum" placeholder="2027/014 · 2 June 2027">
+      <span class="lbl">Issuer: name, NIF, address</span>
+      <input type="text" id="iFrom" placeholder="Your consultancy, NIF, address">
+    </div>
+    <div class="card">
+      <span class="lbl">Client: name, NIF, address</span>
+      <input type="text" id="iTo" placeholder="Son Vell Aqüicultura SL, NIF, address">
+      <span class="lbl">Description of the service</span>
+      <input type="text" id="iDesc" placeholder="Posidonia survey and report, bay of …">
+    </div>
+  </div>
+  <div class="invoice" id="invBox"></div>
+  <p class="hint" style="margin-top:10px">IVA
+     <input type="number" id="ivaPct" value="21" min="0" max="21" step="1"
+       style="width:58px;text-align:right;border:1px solid var(--line2);border-radius:6px;padding:3px 5px;background:var(--tint)"> %
+     · IRPF retention
+     <input type="number" id="irpfPct" value="15" min="0" max="20" step="1"
+       style="width:58px;text-align:right;border:1px solid var(--line2);border-radius:6px;padding:3px 5px;background:var(--tint)"> %.
+     The retention applies when you invoice a company or another professional, not a private
+     individual. A professional in the first years of activity may apply 7 %.</p>
+</section>
+
+<hr class="rule">
+
+<!-- 6 -->
+<section id="s6">
+  <div class="step-h"><span class="num">Check</span><h2>The model answer</h2></div>
+  <div class="gate" id="gateModel">
+    <p>Compare only after you have a number of your own.</p>
+    <button class="btn" id="openModel">Show the model answer</button>
+  </div>
+  <div id="model" class="model" hidden>
+    <div class="card">
+      <table>
+        <thead><tr><th>Item</th><th>Who, and how much</th><th class="n">Cost</th></tr></thead>
+        <tbody>
+          <tr><td>Survey design and permits</td><td>Consultant, 2 days</td><td class="n">560 €</td></tr>
+          <tr><td>Field survey</td><td>Consultant 3 d + technician 3 d + boat 3 d</td><td class="n">2 460 €</td></tr>
+          <tr><td>Travel and subsistence</td><td>3 field days</td><td class="n">180 €</td></tr>
+          <tr><td>Laboratory analysis</td><td>20 samples</td><td class="n">960 €</td></tr>
+          <tr><td>Analysis and mapping</td><td>Consultant, 4 days</td><td class="n">1 120 €</td></tr>
+          <tr><td>Reporting and client meeting</td><td>Senior consultant, 3 days</td><td class="n">1 260 €</td></tr>
+          <tr><td colspan="2"><b>Direct costs</b></td><td class="n"><b>6 540 €</b></td></tr>
+          <tr><td colspan="2">Overhead, 15 %</td><td class="n">981 €</td></tr>
+          <tr><td colspan="2"><b>Fee, before tax</b></td><td class="n"><b>7 521 €</b></td></tr>
+          <tr><td colspan="2">Variation: two coves (820 €) + half a day of analysis (140 €) + GIS day (280 €), with overhead</td><td class="n">1 426 €</td></tr>
+          <tr><td colspan="2"><b>Base imponible</b></td><td class="n"><b>8 947 €</b></td></tr>
+          <tr><td colspan="2">IVA, 21 %</td><td class="n">1 878,87 €</td></tr>
+          <tr><td colspan="2">Retenció IRPF, 15 %</td><td class="n">− 1 342,05 €</td></tr>
+          <tr><td colspan="2"><b>Total the client pays</b></td><td class="n"><b>9 483,82 €</b></td></tr>
+        </tbody>
+      </table>
+      <p class="hint" style="margin-top:12px">Any fee between about 6 000 € and 10 000 € is
+        defensible. What is not defensible is a round number with no arithmetic behind it,
+        or a fee that forgets the boat, the laboratory or the overhead.</p>
+      <ol class="lessons">
+        <li><b>The scope is the price.</b> Everything you did not exclude, you agreed to do.</li>
+        <li><b>Reporting is the biggest block of time</b> in most consultancy jobs, and the
+          one costed at zero by almost every group.</li>
+        <li><b>A change of scope is priced in writing before it is done</b>, not argued
+          about at the end.</li>
+        <li><b>The number the client pays is not the number you earn.</b> The IVA passes
+          through you to the tax office; the retention is your income tax, paid in advance
+          by your client.</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p><b>The rate card is invented for the exercise</b> and plausible for a small Balearic
+     consultancy. The client, the company and the mooring application are invented too.</p>
+  <p><b>The tax treatment is real.</b> IVA on professional services is 21 %. A professional
+     invoicing a company or another professional applies an IRPF retention, normally 15 %,
+     with a reduced rate in the first years of activity. The compulsory contents of an
+     invoice are set by Real Decreto 1619/2012.</p>
+  <p>20128 Writing and Execution of Projects · Degree in Biology · Universitat de les Illes
+     Balears · 2026–2027. Nothing you type leaves your browser, and nothing is handed in.</p>
+</footer>
+</div>
+
+<script>
+"use strict";
+var RATES = [
+  {k:"senior", n:"Senior consultant", r:420, u:"days"},
+  {k:"consultant", n:"Consultant", r:280, u:"days"},
+  {k:"tech", n:"Field technician", r:190, u:"days"},
+  {k:"boat", n:"Boat with skipper", r:350, u:"days"},
+  {k:"lab", n:"Laboratory analysis", r:48, u:"samples"},
+  {k:"ts", n:"Travel and subsistence", r:60, u:"field days"},
+  {k:"other", n:"Other (type the price)", r:0, u:"units"}
+];
+var SCOPE_CHOICES = ["Inside the scope we wrote", "Outside it", "One of each"];
+var ACT_CHOICES = ["Absorb it", "Refuse it", "Price it as a variation"];
+var KEY = "uib20128.quote.v1";
+var st = {inScope:"", outScope:"", quote:[], vari:[], oh:15, iva:21, irpf:15,
+          terms:{}, invoice:{}, scope:"", act:"", reply:"", mail:false, model:false};
+
+function group(intStr){
+  return intStr.replace(/\B(?=(\d{3})+(?!\d))/g, "\u202f");
+}
+function money(v){
+  if (!isFinite(v)) v = 0;
+  var neg = v < 0; v = Math.abs(v);
+  var parts = v.toFixed(2).split(".");
+  return (neg ? "\u2212 " : "") + group(parts[0]) + "," + parts[1] + " €";
+}
+function short(v){
+  if (!isFinite(v)) v = 0;
+  return group(Math.round(v).toString());
+}
+function $(s){ return document.querySelector(s); }
+function load(){
+  try { var raw = localStorage.getItem(KEY); if (raw){ var o = JSON.parse(raw);
+    if (o && typeof o === "object") Object.assign(st, o); } } catch(e){}
+}
+var sv;
+function save(){ clearTimeout(sv); sv = setTimeout(function(){
+  try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }, 250); }
+
+function blankRow(){ return {what:"", res:"consultant", rate:280, qty:0}; }
+
+function rowEl(row, list, tbody){
+  var tr = document.createElement("tr");
+  // description
+  var td1 = document.createElement("td");
+  var i1 = document.createElement("input");
+  i1.type = "text"; i1.value = row.what; i1.placeholder = "e.g. field survey";
+  i1.oninput = function(){ row.what = i1.value; save(); };
+  td1.appendChild(i1); tr.appendChild(td1);
+  // resource
+  var td2 = document.createElement("td");
+  var sel = document.createElement("select");
+  RATES.forEach(function(r){
+    var o = document.createElement("option"); o.value = r.k; o.textContent = r.n;
+    sel.appendChild(o);
+  });
+  sel.value = row.res;
+  td2.appendChild(sel); tr.appendChild(td2);
+  // rate
+  var td3 = document.createElement("td"); td3.className = "n";
+  var i3 = document.createElement("input");
+  i3.type = "number"; i3.min = "0"; i3.step = "1"; i3.value = row.rate;
+  td3.appendChild(i3); tr.appendChild(td3);
+  // qty
+  var td4 = document.createElement("td"); td4.className = "n";
+  var i4 = document.createElement("input");
+  i4.type = "number"; i4.min = "0"; i4.step = "0.5"; i4.value = row.qty;
+  var unit = document.createElement("div");
+  unit.className = "hint";
+  unit.style.cssText = "font-size:11px;text-align:right;padding-right:8px;margin-top:-4px";
+  td4.appendChild(i4); td4.appendChild(unit); tr.appendChild(td4);
+  // cost
+  var td5 = document.createElement("td"); td5.className = "calc"; tr.appendChild(td5);
+  // delete
+  var td6 = document.createElement("td"); td6.className = "del";
+  var del = document.createElement("button");
+  del.type = "button"; del.textContent = "×"; del.title = "Remove this line";
+  del.onclick = function(){
+    var i = list.indexOf(row); if (i > -1) list.splice(i, 1);
+    render(); save();
+  };
+  td6.appendChild(del); tr.appendChild(td6);
+
+  function unitName(){
+    var r = RATES.filter(function(x){ return x.k === row.res; })[0];
+    return r ? r.u : "units";
+  }
+  function paint(){
+    td5.textContent = money(row.rate * row.qty);
+    unit.textContent = unitName();
+  }
+  sel.onchange = function(){
+    row.res = sel.value;
+    var r = RATES.filter(function(x){ return x.k === row.res; })[0];
+    if (r && r.r) { row.rate = r.r; i3.value = r.r; }
+    paint(); totals(); save();
+  };
+  i3.oninput = function(){ row.rate = parseFloat(i3.value) || 0; paint(); totals(); save(); };
+  i4.oninput = function(){ row.qty = parseFloat(i4.value) || 0; paint(); totals(); save(); };
+  paint();
+  tbody.appendChild(tr);
+}
+
+function render(){
+  var qb = $("#quoteTbl tbody"); qb.innerHTML = "";
+  st.quote.forEach(function(r){ rowEl(r, st.quote, qb); });
+  var vb = $("#varTbl tbody"); vb.innerHTML = "";
+  st.vari.forEach(function(r){ rowEl(r, st.vari, vb); });
+  totals();
+}
+
+function sum(list){
+  return list.reduce(function(a, r){ return a + (r.rate || 0) * (r.qty || 0); }, 0);
+}
+
+function totals(){
+  var oh = (parseFloat($("#ohPct").value) || 0) / 100;
+  st.oh = oh * 100;
+  var qd = sum(st.quote), qo = qd * oh, qf = qd + qo;
+  $("#qDirect").textContent = money(qd);
+  $("#qOh").textContent = money(qo);
+  $("#qFee").textContent = money(qf);
+  var vd = sum(st.vari), vo = vd * oh, vf = vd + vo;
+  $("#vDirect").textContent = money(vd);
+  $("#vOh").textContent = money(vo);
+  $("#vFee").textContent = money(vf);
+
+  var ivaP = (parseFloat($("#ivaPct").value) || 0) / 100;
+  var irpfP = (parseFloat($("#irpfPct").value) || 0) / 100;
+  st.iva = ivaP * 100; st.irpf = irpfP * 100;
+  var base = qf + vf, iva = base * ivaP, irpf = base * irpfP;
+  var total = base + iva - irpf;
+
+  var box = $("#invBox"); box.innerHTML = "";
+  [["Base imponible", money(base), "fee plus variation", ""],
+   ["IVA " + Math.round(ivaP * 100) + " %", money(iva), "added to the base", ""],
+   ["Retenció IRPF " + Math.round(irpfP * 100) + " %", "− " + money(irpf),
+    "withheld and paid by the client", "minus"],
+   ["Total the client pays", money(total), "base + IVA − retention", "total"]
+  ].forEach(function(c){
+    var d = document.createElement("div");
+    d.className = "cell" + (c[3] === "total" ? " total" : "");
+    var lb = document.createElement("div"); lb.className = "lb"; lb.textContent = c[0];
+    var nb = document.createElement("div");
+    nb.className = "nb" + (c[3] === "minus" ? " minus" : ""); nb.textContent = c[1];
+    var h = document.createElement("div"); h.className = "hint"; h.textContent = c[2];
+    d.appendChild(lb); d.appendChild(nb); d.appendChild(h);
+    box.appendChild(d);
+  });
+
+  $("#pFee").textContent = short(qf);
+  $("#pVar").textContent = short(vf);
+  $("#pTot").textContent = short(total);
+}
+
+function radios(host, list, field){
+  host.innerHTML = "";
+  list.forEach(function(c){
+    var lab = document.createElement("label");
+    var r = document.createElement("input");
+    r.type = "radio"; r.name = field; r.value = c; r.checked = (st[field] === c);
+    r.onchange = function(){ st[field] = c; save(); };
+    lab.appendChild(r); lab.appendChild(document.createTextNode(c));
+    host.appendChild(lab);
+  });
+}
+
+function bindText(sel, get, set){
+  var el = $(sel);
+  el.value = get() || "";
+  el.oninput = function(){ set(el.value); save(); };
+}
+
+function openMail(){
+  st.mail = true; $("#gateMail").hidden = true; $("#mail2").hidden = false; save();
+}
+function openModel(){
+  st.model = true; $("#gateModel").hidden = true; $("#model").hidden = false; save();
+}
+
+load();
+if (!st.quote.length) st.quote = [blankRow(), blankRow(), blankRow()];
+if (!st.vari.length) st.vari = [blankRow()];
+$("#ohPct").value = st.oh; $("#ivaPct").value = st.iva; $("#irpfPct").value = st.irpf;
+bindText("#inScope", function(){ return st.inScope; }, function(v){ st.inScope = v; });
+bindText("#outScope", function(){ return st.outScope; }, function(v){ st.outScope = v; });
+bindText("#reply", function(){ return st.reply; }, function(v){ st.reply = v; });
+["tDates","tClient","tPay","tValid"].forEach(function(id){
+  bindText("#" + id, function(){ return st.terms[id]; }, function(v){ st.terms[id] = v; });
+});
+["iNum","iFrom","iTo","iDesc"].forEach(function(id){
+  bindText("#" + id, function(){ return st.invoice[id]; }, function(v){ st.invoice[id] = v; });
+});
+radios($("#scopeChoice"), SCOPE_CHOICES, "scope");
+radios($("#actChoice"), ACT_CHOICES, "act");
+$("#addQuote").onclick = function(){ st.quote.push(blankRow()); render(); save(); };
+$("#addVar").onclick = function(){ st.vari.push(blankRow()); render(); save(); };
+$("#ohPct").oninput = function(){ totals(); save(); };
+$("#ivaPct").oninput = function(){ totals(); save(); };
+$("#irpfPct").oninput = function(){ totals(); save(); };
+$("#openMail").onclick = openMail;
+$("#openModel").onclick = openModel;
+$("#printbtn").onclick = function(){ window.print(); };
+$("#clearbtn").onclick = function(){
+  var b = $("#clearbtn");
+  if (b.dataset.armed !== "1"){
+    b.dataset.armed = "1"; b.textContent = "Clear everything?";
+    setTimeout(function(){ b.dataset.armed = "0"; b.textContent = "Clear"; }, 4000);
+    return;
+  }
+  try { localStorage.removeItem(KEY); } catch(e){}
+  location.reload();
+};
+render();
+if (st.mail) openMail();
+if (st.model) openModel();
+</script>
+</body>
+</html>

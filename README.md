@@ -36,3 +36,16 @@ the mark of the subject.
 The bat-and-street-lighting project in both drafts is **invented**. The lighting figure, the
 species and the LED replacement programme are plausible for Mallorca but they are not
 citations, and should not be quoted as such.
+
+## Price the job, then invoice it
+
+A consultancy costing exercise for Block II, Unit 7. A client asks for a
+*Posidonia oceanica* survey before a mooring application. Students write the
+scope, build the fee from a rate card, meet a change of scope, and issue the
+invoice with IVA and the IRPF retention.
+
+**Open it here:** https://montsecompa.github.io/20128-project-writing/quote/
+
+The sheet calculates as you type, keeps your work in your own browser, and
+shows the model answer when you ask for it. Nothing is submitted and nothing
+is handed in.
