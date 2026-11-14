@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>20128 Peer feedback</title>
+<style>
+  :root{
+    --navy:#253760; --blue:#4173B0; --light:#EAF0F8; --tint:#F3F7FC;
+    --grey:#5A6B85; --amber:#E8A33D; --line:#C9D5E4; --bg:#FFFFFF;
+    --ok:#1B6B3A; --ink:#1B2534;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink); font:16px/1.45 Arial,Helvetica,sans-serif;
+    padding-bottom:84px;
+  }
+  header{
+    background:var(--navy); color:#fff;
+    padding:14px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));
+    position:sticky; top:0; z-index:20;
+  }
+  header .t{font-size:15px;font-weight:bold;letter-spacing:.01em}
+  header .s{font-size:12.5px;color:#B9C9DF;margin-top:2px}
+  main{
+    max-width:760px; margin:0 auto;
+    padding:18px max(16px,env(safe-area-inset-right,0px)) 18px max(16px,env(safe-area-inset-left,0px));
+  }
+  h2{font-size:19px;color:var(--navy);margin:22px 0 8px}
+  h2:first-child{margin-top:4px}
+  p.lead{color:var(--grey);font-size:14px;margin:0 0 14px}
+  label{display:block;font-size:13px;font-weight:bold;color:var(--navy);margin:12px 0 4px}
+  input[type=text],textarea,select{
+    width:100%; font:15px Arial,Helvetica,sans-serif; color:var(--ink);
+    border:1.5px solid var(--line); border-radius:8px; padding:9px 11px; background:#fff;
+  }
+  textarea{resize:vertical; min-height:62px}
+  input:focus,textarea:focus,select:focus{outline:2px solid var(--blue); outline-offset:1px; border-color:var(--blue)}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row>div{flex:1 1 180px;min-width:0}
+  .btn{
+    display:inline-block;border:none;border-radius:8px;padding:11px 18px;
+    font:bold 15px Arial,Helvetica,sans-serif;cursor:pointer;
+  }
+  .btn.p{background:var(--navy);color:#fff}
+  .btn.s{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .cohort{display:flex;gap:8px;margin:6px 0 2px}
+  .cohort button{
+    flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;
+    padding:14px 6px;font:bold 17px Arial,Helvetica,sans-serif;color:var(--navy);cursor:pointer;
+  }
+  .cohort button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+  ul.groups{list-style:none;padding:0;margin:10px 0 0}
+  ul.groups li{
+    border:1.5px solid var(--line);border-radius:10px;margin-bottom:8px;background:#fff;
+    display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;
+  }
+  ul.groups li.done{border-color:var(--ok);background:#F2F8F4}
+  ul.groups li.mine{opacity:.5;cursor:default;background:var(--tint)}
+  ul.groups .code{font-weight:bold;color:var(--navy);font-size:16px;min-width:64px}
+  ul.groups .state{margin-left:auto;font-size:13px;color:var(--grey)}
+  ul.groups li.done .state{color:var(--ok);font-weight:bold}
+  .crit{border-top:1px solid var(--line);padding:12px 0 4px}
+  .crit:first-of-type{border-top:none}
+  .crit .name{font-weight:bold;color:var(--navy);font-size:14.5px}
+  .crit .hint{font-size:12.5px;color:var(--grey);margin:1px 0 8px}
+  .chips{display:flex;gap:6px}
+  .chips button{
+    flex:1;border:1.5px solid var(--line);background:#fff;border-radius:8px;
+    padding:12px 0;font:bold 16px Arial,Helvetica,sans-serif;color:var(--navy);cursor:pointer;
+  }
+  .chips button[aria-pressed=true]{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .scalerow{display:flex;justify-content:space-between;font-size:11.5px;color:var(--grey);margin-top:4px}
+  .bar{
+    position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);
+    padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    display:flex;align-items:center;gap:12px;z-index:30;
+  }
+  .bar .prog{flex:1;font-size:13.5px;color:var(--grey)}
+  .bar .prog b{color:var(--navy)}
+  .note{background:var(--tint);border-left:4px solid var(--blue);padding:10px 12px;border-radius:0 8px 8px 0;font-size:13.5px;color:var(--grey);margin:14px 0}
+  .warn{background:#FDF3E2;border-left-color:var(--amber);color:#6b5520}
+  pre.out{white-space:pre-wrap;background:var(--tint);border:1px solid var(--line);border-radius:8px;padding:12px;font:13px/1.4 ui-monospace,Menlo,Consolas,monospace}
+  .hide{display:none!important}
+  footer{color:var(--grey);font-size:12px;text-align:center;padding:10px 16px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="t">20128 · Peer feedback on the elevator pitches</div>
+  <div class="s" id="sub">Writing and Execution of Projects · Biology Degree · UIB</div>
+</header>
+
+<main>
+
+  <!-- ─── step 1: who are you ─── -->
+  <section id="setup">
+    <h2>Before the pitches start</h2>
+    <p class="lead">Takes twenty seconds. Your answers stay on this phone until you send them at the end.</p>
+
+    <label for="name">Your name</label>
+    <input type="text" id="name" autocomplete="name" placeholder="Name and surname">
+
+    <label>Your class group</label>
+    <div class="cohort">
+      <button id="c101" aria-pressed="false" onclick="setCohort('101')">101</button>
+      <button id="c102" aria-pressed="false" onclick="setCohort('102')">102</button>
+    </div>
+
+    <label for="own">Your project group</label>
+    <select id="own"><option value="">Choose your group</option></select>
+
+    <div class="note">You score every group except your own. One or two sentences each is enough, but they have to be <b>useful</b>: the group reads them.</div>
+
+    <button class="btn p" id="start" onclick="start()" disabled>Start</button>
+  </section>
+
+  <!-- ─── step 2: list ─── -->
+  <section id="list" class="hide">
+    <h2>Tap the group that just presented</h2>
+    <p class="lead" id="listlead"></p>
+    <ul class="groups" id="glist"></ul>
+    <div class="note">Scoring follows the course evaluation sheet, shortened for a ninety second pitch: content 25 %, knowledge of the subject 25 %, delivery 10 %, plus English. Visual aids and questions are not scored here.</div>
+  </section>
+
+  <!-- ─── step 3: one group ─── -->
+  <section id="score" class="hide">
+    <h2 id="scoretitle">Group</h2>
+    <p class="lead">1 is poor, 5 is excellent. Tap, do not think too long.</p>
+    <div id="crits"></div>
+
+    <label for="worked">What worked (one sentence)</label>
+    <textarea id="worked" placeholder="The problem was clear in the first ten seconds."></textarea>
+
+    <label for="fix">What to fix (one or two sentences)</label>
+    <textarea id="fix" placeholder="I still do not know who the project is for, or what you will measure."></textarea>
+
+    <label for="hear">Would you want to hear the full talk?</label>
+    <div class="chips" id="hearchips">
+      <button type="button" onclick="setHear('yes')" aria-pressed="false">Yes</button>
+      <button type="button" onclick="setHear('maybe')" aria-pressed="false">Maybe</button>
+      <button type="button" onclick="setHear('no')" aria-pressed="false">Not yet</button>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:18px">
+      <button class="btn s" onclick="back()">Back</button>
+      <button class="btn p" onclick="saveGroup()">Save and go back</button>
+    </div>
+  </section>
+
+  <!-- ─── step 4: send ─── -->
+  <section id="send" class="hide">
+    <h2>Send your feedback</h2>
+    <p class="lead" id="sendlead"></p>
+    <div id="sendbox"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn p" id="sendbtn" onclick="sendForm()">Open the form, already filled in</button>
+      <button class="btn s" onclick="copyAll()">Copy my feedback</button>
+      <button class="btn s" onclick="show('list')">Back to the list</button>
+    </div>
+    <div class="note" id="sendnote"></div>
+    <pre class="out hide" id="plain"></pre>
+  </section>
+
+  <footer>Universitat de les Illes Balears · 20128 · peer feedback sheet</footer>
+</main>
+
+<div class="bar">
+  <div class="prog" id="prog">Not started</div>
+  <button class="btn p" id="finish" onclick="show('send')" disabled>Finish</button>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   Configuration. GROUPS lists the presenting groups per class.
+   FORM is the Google Form that collects the sheets: paste the
+   prefilled link in BASE and the five entry ids below, and the
+   Send button starts working. Until then the page falls back to
+   copy and paste, which still works.
+   ───────────────────────────────────────────────────────────── */
+var GROUPS = {
+  "101": ["101_1","101_2","101_3","101_4","101_5","101_6","101_7"],
+  "102": ["102_1","102_2","102_3","102_4","102_5"]
+};
+
+var FORM = {
+  BASE: "",                 // e.g. https://docs.google.com/forms/d/e/XXXX/viewform?usp=pp_url
+  NAME: "",                 // e.g. entry.1111111
+  GROUP: "",
+  COHORT: "",
+  SCORES: "",
+  FEEDBACK: ""
+};
+
+var CRITERIA = [
+  {k:"content",  n:"Explanation of content",
+   h:"Did you understand what the project does, for whom, and where?"},
+  {k:"knowledge", n:"Knowledge of the subject",
+   h:"Do they own it, or are they reciting a script?"},
+  {k:"delivery", n:"Delivery",
+   h:"Clear, within the time, and worth listening to."},
+  {k:"english",  n:"English",
+   h:"Clear and correct enough to follow without effort."}
+];
+
+var KEY = "uib20128.peer.v1";
+var st = {name:"", cohort:"", own:"", data:{}};
+var current = null;
+
+/* ── storage ───────────────────────────────────────────────── */
+function load(){
+  try{
+    var raw = localStorage.getItem(KEY);
+    if(raw) st = Object.assign(st, JSON.parse(raw));
+  }catch(e){}
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){}
+}
+
+/* ── setup ─────────────────────────────────────────────────── */
+function setCohort(c){
+  st.cohort = c;
+  document.getElementById("c101").setAttribute("aria-pressed", c==="101");
+  document.getElementById("c102").setAttribute("aria-pressed", c==="102");
+  var sel = document.getElementById("own");
+  sel.innerHTML = '<option value="">Choose your group</option>';
+  (GROUPS[c]||[]).forEach(function(g){
+    var o = document.createElement("option");
+    o.value = g; o.textContent = g; sel.appendChild(o);
+  });
+  if(st.own && (GROUPS[c]||[]).indexOf(st.own) >= 0) sel.value = st.own;
+  checkReady(); save();
+}
+function checkReady(){
+  st.name = document.getElementById("name").value.trim();
+  st.own  = document.getElementById("own").value;
+  document.getElementById("start").disabled = !(st.name && st.cohort && st.own);
+  save();
+}
+function start(){ show("list"); renderList(); }
+
+/* ── navigation ────────────────────────────────────────────── */
+function show(id){
+  ["setup","list","score","send"].forEach(function(s){
+    document.getElementById(s).classList.toggle("hide", s!==id);
+  });
+  if(id==="send") renderSend();
+  if(id==="list") renderList();
+  window.scrollTo(0,0);
+}
+function back(){ show("list"); }
+
+/* ── list ──────────────────────────────────────────────────── */
+function others(){
+  return (GROUPS[st.cohort]||[]).filter(function(g){ return g!==st.own; });
+}
+function renderList(){
+  var ul = document.getElementById("glist");
+  ul.innerHTML = "";
+  document.getElementById("listlead").textContent =
+    "Class " + st.cohort + ". You are " + st.name + ", group " + st.own + ".";
+  (GROUPS[st.cohort]||[]).forEach(function(g){
+    var li = document.createElement("li");
+    var mine = (g === st.own);
+    var done = !!st.data[g];
+    li.className = mine ? "mine" : (done ? "done" : "");
+    var code = document.createElement("span");
+    code.className = "code"; code.textContent = g;
+    var state = document.createElement("span");
+    state.className = "state";
+    state.textContent = mine ? "your group" : (done ? "done, tap to edit" : "not scored");
+    li.appendChild(code); li.appendChild(state);
+    if(!mine) li.onclick = function(){ openGroup(g); };
+    ul.appendChild(li);
+  });
+  updateProgress();
+}
+function updateProgress(){
+  var tot = others().length;
+  var n = others().filter(function(g){ return st.data[g]; }).length;
+  document.getElementById("prog").innerHTML =
+    st.cohort ? ("<b>" + n + "</b> of " + tot + " groups scored") : "Not started";
+  document.getElementById("finish").disabled = (n === 0);
+}
+
+/* ── one group ─────────────────────────────────────────────── */
+function openGroup(g){
+  current = g;
+  document.getElementById("scoretitle").textContent = "Group " + g;
+  var d = st.data[g] || {s:{}, worked:"", fix:"", hear:""};
+  var box = document.getElementById("crits");
+  box.innerHTML = "";
+  CRITERIA.forEach(function(c){
+    var w = document.createElement("div");
+    w.className = "crit";
+    w.innerHTML = '<div class="name">' + c.n + '</div><div class="hint">' + c.h + '</div>';
+    var chips = document.createElement("div");
+    chips.className = "chips";
+    for(var i=1;i<=5;i++){
+      (function(v){
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = v;
+        b.setAttribute("aria-pressed", d.s[c.k] === v);
+        b.onclick = function(){
+          d.s[c.k] = v;
+          Array.prototype.forEach.call(chips.children, function(x){
+            x.setAttribute("aria-pressed", x.textContent === String(v));
+          });
+        };
+        chips.appendChild(b);
+      })(i);
+    }
+    w.appendChild(chips);
+    var sc = document.createElement("div");
+    sc.className = "scalerow";
+    sc.innerHTML = "<span>poor</span><span>excellent</span>";
+    w.appendChild(sc);
+    box.appendChild(w);
+  });
+  document.getElementById("worked").value = d.worked || "";
+  document.getElementById("fix").value = d.fix || "";
+  setHear(d.hear || "", true);
+  st.data[g] = d;
+  show("score");
+}
+function setHear(v, quiet){
+  if(current && st.data[current]) st.data[current].hear = v;
+  var map = {yes:0, maybe:1, no:2};
+  var kids = document.getElementById("hearchips").children;
+  Array.prototype.forEach.call(kids, function(b, i){
+    b.setAttribute("aria-pressed", map[v] === i);
+  });
+  if(!quiet) save();
+}
+function saveGroup(){
+  var d = st.data[current];
+  d.worked = document.getElementById("worked").value.trim();
+  d.fix = document.getElementById("fix").value.trim();
+  if(!Object.keys(d.s).length && !d.worked && !d.fix){ delete st.data[current]; }
+  save();
+  show("list");
+}
+
+/* ── output ────────────────────────────────────────────────── */
+function scoreString(){
+  return others().filter(function(g){ return st.data[g]; }).map(function(g){
+    var s = st.data[g].s;
+    return g + ":" + CRITERIA.map(function(c){ return s[c.k] || "-"; }).join(",");
+  }).join(" | ");
+}
+function feedbackString(){
+  return others().filter(function(g){ return st.data[g]; }).map(function(g){
+    var d = st.data[g];
+    var parts = [g + ":"];
+    if(d.worked) parts.push("Worked: " + d.worked);
+    if(d.fix) parts.push("To fix: " + d.fix);
+    if(d.hear) parts.push("Full talk: " + d.hear);
+    return parts.join(" ");
+  }).join("\n");
+}
+function renderSend(){
+  var tot = others().length;
+  var n = others().filter(function(g){ return st.data[g]; }).length;
+  document.getElementById("sendlead").textContent =
+    "You scored " + n + " of " + tot + " groups. Scores go in as numbers out of 5, in the order content, knowledge, delivery, English.";
+  var ready = FORM.BASE && FORM.NAME && FORM.SCORES;
+  document.getElementById("sendbtn").classList.toggle("hide", !ready);
+  document.getElementById("sendnote").className = ready ? "note" : "note warn";
+  document.getElementById("sendnote").innerHTML = ready
+    ? "The form opens with everything already written in it. Check your name and press <b>Submit</b>. Nothing is sent until you do."
+    : "The class form is not linked yet. Press <b>Copy my feedback</b> and paste it where your lecturer asks.";
+  var box = document.getElementById("sendbox");
+  box.innerHTML = "";
+  var pre = document.createElement("pre");
+  pre.className = "out";
+  var preview = others().filter(function(g){ return st.data[g]; }).map(function(g){
+    var d = st.data[g], s = d.s;
+    var nums = CRITERIA.map(function(c){ return s[c.k] || "-"; }).join(",");
+    var out = [g + "  [" + nums + "]"];
+    if(d.worked) out.push("  Worked: " + d.worked);
+    if(d.fix) out.push("  To fix: " + d.fix);
+    return out.join("\n");
+  }).join("\n\n");
+  pre.textContent = preview || "Nothing scored yet.";
+  box.appendChild(pre);
+}
+function formURL(){
+  var u = FORM.BASE;
+  function add(entry, val){
+    if(!entry) return;
+    u += "&" + entry + "=" + encodeURIComponent(val);
+  }
+  add(FORM.NAME, st.name);
+  add(FORM.GROUP, st.own);
+  add(FORM.COHORT, st.cohort);
+  add(FORM.SCORES, scoreString());
+  add(FORM.FEEDBACK, feedbackString());
+  return u;
+}
+function sendForm(){
+  var a = document.createElement("a");
+  a.href = formURL(); a.target = "_blank"; a.rel = "noopener";
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function copyAll(){
+  var text = "20128 peer feedback\nName: " + st.name + "\nGroup: " + st.own +
+             "\nClass: " + st.cohort + "\nScores (content, knowledge, delivery, English, out of 5):\n" +
+             scoreString() + "\n\n" + feedbackString();
+  var done = function(){
+    var p = document.getElementById("plain");
+    p.classList.remove("hide");
+    p.textContent = text;
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){
+      document.getElementById("sendnote").textContent = "Copied. Paste it where your lecturer asks.";
+      done();
+    }, done);
+  } else { done(); }
+}
+
+/* ── boot ──────────────────────────────────────────────────── */
+load();
+document.getElementById("name").value = st.name || "";
+if(st.cohort) setCohort(st.cohort);
+document.getElementById("name").addEventListener("input", checkReady);
+document.getElementById("own").addEventListener("change", checkReady);
+["worked","fix"].forEach(function(id){
+  document.getElementById(id).addEventListener("input", function(){
+    if(current && st.data[current]){
+      st.data[current][id === "worked" ? "worked" : "fix"] = this.value;
+      save();
+    }
+  });
+});
+checkReady();
+if(st.name && st.cohort && st.own){ show("list"); }
+</script>
+</body>
+</html>
