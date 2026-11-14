@@ -206,6 +206,29 @@ var CRITERIA = [
    h:"Clear and correct enough to follow without effort."}
 ];
 
+/* The pitch has no visual aids and no question round, so the sheet's
+   25/25/10 becomes 40/40/20 of the mark, and English keeps its role as
+   a bonus of up to one point, as in the real defence. */
+var WEIGHT = {content:0.4, knowledge:0.4, delivery:0.2};
+
+function totalFor(g){
+  var d = st.data[g];
+  if(!d) return null;
+  var s = d.s || {}, sum = 0, w = 0;
+  ["content","knowledge","delivery"].forEach(function(k){
+    if(s[k]){ sum += s[k] * WEIGHT[k]; w += WEIGHT[k]; }
+  });
+  if(!w) return null;
+  var base = (sum / w) * 2;                       // 1-5 scale onto 0-10
+  var bonus = s.english === 5 ? 1 : (s.english === 4 ? 0.5 : 0);
+  var t = Math.min(10, base + bonus);
+  return Math.round(t * 10) / 10;
+}
+function totalLabel(g){
+  var t = totalFor(g);
+  return t === null ? "not scored" : t.toFixed(1) + " / 10";
+}
+
 var KEY = "uib20128.peer.v1";
 var st = {name:"", cohort:"", own:"", data:{}};
 var current = null;
@@ -272,7 +295,8 @@ function renderList(){
     code.className = "code"; code.textContent = g;
     var state = document.createElement("span");
     state.className = "state";
-    state.textContent = mine ? "your group" : (done ? "done, tap to edit" : "not scored");
+    state.textContent = mine ? "your group"
+      : (done ? totalLabel(g) + ", tap to edit" : "not scored");
     li.appendChild(code); li.appendChild(state);
     if(!mine) li.onclick = function(){ openGroup(g); };
     ul.appendChild(li);
@@ -312,6 +336,7 @@ function openGroup(g){
           Array.prototype.forEach.call(chips.children, function(x){
             x.setAttribute("aria-pressed", x.textContent === String(v));
           });
+          refreshTotal(); save();
         };
         chips.appendChild(b);
       })(i);
@@ -323,12 +348,29 @@ function openGroup(g){
     w.appendChild(sc);
     box.appendChild(w);
   });
+  var tot = document.createElement("div");
+  tot.id = "livetotal";
+  tot.style.cssText = "margin-top:14px;padding:11px 13px;border-radius:8px;" +
+    "background:var(--light);color:var(--navy);font-weight:bold;font-size:15px";
+  box.appendChild(tot);
+  refreshTotal();
   document.getElementById("worked").value = d.worked || "";
   document.getElementById("fix").value = d.fix || "";
   setHear(d.hear || "", true);
   st.data[g] = d;
   show("score");
 }
+function refreshTotal(){
+  var el = document.getElementById("livetotal");
+  if(!el || !current) return;
+  var t = totalFor(current);
+  el.innerHTML = t === null
+    ? "Total: tap the first three criteria"
+    : "Total for " + current + ": " + t.toFixed(1) + " / 10" +
+      '<span style="font-weight:normal;color:var(--grey);font-size:12.5px">' +
+      "  ·  content and knowledge 40 % each, delivery 20 %, English up to +1</span>";
+}
+
 function setHear(v, quiet){
   if(current && st.data[current]) st.data[current].hear = v;
   var map = {yes:0, maybe:1, no:2};
@@ -351,7 +393,9 @@ function saveGroup(){
 function scoreString(){
   return others().filter(function(g){ return st.data[g]; }).map(function(g){
     var s = st.data[g].s;
-    return g + ":" + CRITERIA.map(function(c){ return s[c.k] || "-"; }).join(",");
+    var t = totalFor(g);
+    return g + ":" + CRITERIA.map(function(c){ return s[c.k] || "-"; }).join(",") +
+           "=" + (t === null ? "-" : t.toFixed(1));
   }).join(" | ");
 }
 function feedbackString(){
@@ -362,6 +406,7 @@ function feedbackString(){
       lines.push("  " + c.n + " (" + c.w + "): " +
                  (sc[c.k] ? sc[c.k] + "/5" : "not scored"));
     });
+    lines.push("  Total: " + totalLabel(g));
     if(d.worked) lines.push("  What worked: " + d.worked);
     if(d.fix) lines.push("  What to fix: " + d.fix);
     if(d.hear) lines.push("  Would hear the full talk: " + d.hear);
@@ -407,7 +452,7 @@ function sendForm(){
 function copyAll(){
   var text = "20128 peer feedback\nName: " + st.name + "\nGroup: " + st.own +
              "\nClass: " + st.cohort + "\n\n" + feedbackString() +
-             "\n\nCompact scores (content, knowledge, delivery, English, out of 5):\n" +
+             "\n\nCompact scores (content, knowledge, delivery, English out of 5, then the total out of 10):\n" +
              scoreString();
   var done = function(){
     var p = document.getElementById("plain");
