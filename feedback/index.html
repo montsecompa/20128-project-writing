@@ -196,13 +196,13 @@ var FORM = {
 };
 
 var CRITERIA = [
-  {k:"content",  n:"Explanation of content",
+  {k:"content",  n:"Explanation of content", w:"25 %",
    h:"Did you understand what the project does, for whom, and where?"},
-  {k:"knowledge", n:"Knowledge of the subject",
+  {k:"knowledge", n:"Knowledge of the subject", w:"25 %",
    h:"Do they own it, or are they reciting a script?"},
-  {k:"delivery", n:"Delivery",
+  {k:"delivery", n:"Delivery", w:"10 %",
    h:"Clear, within the time, and worth listening to."},
-  {k:"english",  n:"English",
+  {k:"english",  n:"English", w:"bonus",
    h:"Clear and correct enough to follow without effort."}
 ];
 
@@ -297,7 +297,9 @@ function openGroup(g){
   CRITERIA.forEach(function(c){
     var w = document.createElement("div");
     w.className = "crit";
-    w.innerHTML = '<div class="name">' + c.n + '</div><div class="hint">' + c.h + '</div>';
+    w.innerHTML = '<div class="name">' + c.n +
+      ' <span style="color:var(--grey);font-weight:normal">' + c.w +
+      '</span></div><div class="hint">' + c.h + '</div>';
     var chips = document.createElement("div");
     chips.className = "chips";
     for(var i=1;i<=5;i++){
@@ -354,19 +356,23 @@ function scoreString(){
 }
 function feedbackString(){
   return others().filter(function(g){ return st.data[g]; }).map(function(g){
-    var d = st.data[g];
-    var parts = [g + ":"];
-    if(d.worked) parts.push("Worked: " + d.worked);
-    if(d.fix) parts.push("To fix: " + d.fix);
-    if(d.hear) parts.push("Full talk: " + d.hear);
-    return parts.join(" ");
-  }).join("\n");
+    var d = st.data[g], sc = d.s || {};
+    var lines = ["Group " + g];
+    CRITERIA.forEach(function(c){
+      lines.push("  " + c.n + " (" + c.w + "): " +
+                 (sc[c.k] ? sc[c.k] + "/5" : "not scored"));
+    });
+    if(d.worked) lines.push("  What worked: " + d.worked);
+    if(d.fix) lines.push("  What to fix: " + d.fix);
+    if(d.hear) lines.push("  Would hear the full talk: " + d.hear);
+    return lines.join("\n");
+  }).join("\n\n");
 }
 function renderSend(){
   var tot = others().length;
   var n = others().filter(function(g){ return st.data[g]; }).length;
   document.getElementById("sendlead").textContent =
-    "You scored " + n + " of " + tot + " groups. Scores go in as numbers out of 5, in the order content, knowledge, delivery, English.";
+    "You scored " + n + " of " + tot + " groups. This is exactly what the group will read, criterion by criterion.";
   var ready = FORM.BASE && FORM.NAME && FORM.SCORES;
   document.getElementById("sendbtn").classList.toggle("hide", !ready);
   document.getElementById("sendnote").className = ready ? "note" : "note warn";
@@ -377,15 +383,7 @@ function renderSend(){
   box.innerHTML = "";
   var pre = document.createElement("pre");
   pre.className = "out";
-  var preview = others().filter(function(g){ return st.data[g]; }).map(function(g){
-    var d = st.data[g], s = d.s;
-    var nums = CRITERIA.map(function(c){ return s[c.k] || "-"; }).join(",");
-    var out = [g + "  [" + nums + "]"];
-    if(d.worked) out.push("  Worked: " + d.worked);
-    if(d.fix) out.push("  To fix: " + d.fix);
-    return out.join("\n");
-  }).join("\n\n");
-  pre.textContent = preview || "Nothing scored yet.";
+  pre.textContent = feedbackString() || "Nothing scored yet.";
   box.appendChild(pre);
 }
 function formURL(){
@@ -408,8 +406,9 @@ function sendForm(){
 }
 function copyAll(){
   var text = "20128 peer feedback\nName: " + st.name + "\nGroup: " + st.own +
-             "\nClass: " + st.cohort + "\nScores (content, knowledge, delivery, English, out of 5):\n" +
-             scoreString() + "\n\n" + feedbackString();
+             "\nClass: " + st.cohort + "\n\n" + feedbackString() +
+             "\n\nCompact scores (content, knowledge, delivery, English, out of 5):\n" +
+             scoreString();
   var done = function(){
     var p = document.getElementById("plain");
     p.classList.remove("hide");
