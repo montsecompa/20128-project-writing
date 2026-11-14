@@ -49,3 +49,15 @@ invoice with IVA and the IRPF retention.
 The sheet calculates as you type, keeps your work in your own browser, and
 shows the model answer when you ask for it. Nothing is submitted and nothing
 is handed in.
+
+## Peer feedback on the pitches
+
+The scoring sheet used in the two final seminars. Students pick their
+class group (101 or 102), score every other group on the course
+evaluation criteria and write one sentence on what worked and one on
+what to fix.
+
+**Open it here:** https://montsecompa.github.io/20128-project-writing/feedback/
+
+Answers stay on the student's own phone until they send them, and the
+page keeps them if it reloads.
